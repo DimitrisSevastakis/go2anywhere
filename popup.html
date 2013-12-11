@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Getting Started Extension's Popup</title>
+    <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
+    <style>
+      body {
+        width: 600px;
+        height: 450px;
+        overflow-x: hidden;
+        background-color: #293134;
+      }
+      
+      #search{
+        position: fixed;
+        top:0;
+        margin-left: 10px;
+        width: 580px;
+        font-size: 150%
+      }
+
+      a,p{
+        margin-top: 2px;
+        margin-bottom: 2px;
+        margin-left: 10px;
+      }
+
+      ul{
+        list-style-type: none;
+        color: #e0e2e4;
+        font-size: 125%;
+        padding: 0px;
+        padding-left: 0px;
+        padding-top: 5px;
+        margin: 0px;
+        margin-top: 5px;
+        margin-left: 10px;
+      }
+
+      #urladdr{
+        color: #70615c;
+        font-size: 70%;
+      }
+
+      li{
+        padding-left: 5px; 
+        
+        border-bottom: 1px solid #556367;
+        border-top: 1px solid #556367;
+      }
+    </style>
+    <!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      -
+      - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
+     -->
+    <script src="popup.js"></script>
+  </head>
+  <body>
+    <input type="text" id="search"><br>
+    <ul id="bookmarks"></p>
+  </body>
+</html>
+

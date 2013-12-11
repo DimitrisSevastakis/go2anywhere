@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+
+  "name": "Fuzzy Bookmarks",
+  "description": "This extension allows you to quickly search through your bookmarks without having to remember exactly the name of the bookmarks.",
+  "version": "1.0",
+
+  "permissions": [
+    "bookmarks"
+  ],
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  }
+}
