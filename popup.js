@@ -98,33 +98,34 @@ document.addEventListener('DOMContentLoaded', function () {
     dumpBookmarks();
     $(function() {
         //on every key input check if 'enter' 'arrow-up' or 'arrow-down'
-        $('#search').keyup(function(event) {
-            
+        $('#search').bind('input',function(event) {
+            //default: filter bookmarks
+            $('#bookmarks').empty();
+            dumpBookmarks($('#search').val());
+        });
+
+        $('#search').keydown(function(event) {
+            s = $('li[data-selected=true]');
             switch(event.which){
                 case 13:
                     //case enter open selected bookmark
-                    $('li[data-selected=true]').focus();
+                    s.focus();
                     break;
                 case 38:
                     //case up-arrow select previous bookmark
-                    s = $('li[data-selected=true]');
-                    if(s.attr('data-ind')>0){
+                    console.log('up');
+                    if(parseInt(s.attr('data-ind'))>0){
                         $('li').css('background-color', '#293134').attr('data-selected', false);
                         $('li').eq(parseInt(s.attr('data-ind'))-1).css('background-color', '#3b4a50').attr('data-selected', true).attr('data-ind', parseInt(s.attr('data-ind'))-1);
                     }
                     break;
                 case 40:
                     //case up-arrow select previous bookmark
-                    s = $('li[data-selected=true]');
-                    if(s.attr('data-ind')<$('li').length){
+                    console.log('down');
+                    if(parseInt(s.attr('data-ind'))<$('li').length){
                         $('li').css('background-color', '#293134').attr('data-selected', false);
                         $('li').eq(parseInt(s.attr('data-ind'))+1).css('background-color', '#3b4a50').attr('data-selected', true).attr('data-ind', parseInt(s.attr('data-ind'))+1);
                     }
-                default:
-                    //default: filter bookmarks
-                    $('#bookmarks').empty();
-                    dumpBookmarks($('#search').val());
-
             }
         });
     });
