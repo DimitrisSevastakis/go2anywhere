@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
             switch(event.which){
                 case 13:
                     //case enter open selected bookmark
-                    s.focus();
+                    chrome.tabs.create({url: s.attr('href')});
                     break;
                 case 38:
                     //case up-arrow select previous bookmark
