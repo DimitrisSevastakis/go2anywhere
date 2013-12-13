@@ -9,7 +9,9 @@ the title of the bookmark and exact match on the url of the bookmark.
 Searching with the '@' symbol before your query it searches only for exact match on the title.
 Searching with the '#' symbol before your query it searches only for exact match on the url.
 
+(As this is still very early in development behaviour may change slightly, eg default search algorithm or symbol meaning)
+
+If there is a tab already open with the same url of the bookmark, will bring that tab forth.
 
 TODO:
-Hitting enter still doesn't do anything, but in the future it will open the selected bookmark.
 The selection can now go out of sight, this will also be fixed.
