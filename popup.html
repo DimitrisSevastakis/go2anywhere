@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>Getting Started Extension's Popup</title>
-    <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="jquery-1.10.2.js"></script>
     <style>
       body {
         width: 600px;
@@ -12,11 +12,16 @@
       }
       
       #search{
+        width: 100%;
+        font-size: 150%;
+      }
+
+      #searchspace{
+        z-index: 10;
         position: fixed;
         top:0;
         margin-left: 10px;
         width: 580px;
-        font-size: 150%
       }
 
       .bookmark_path{
@@ -35,10 +40,55 @@
         font-size: 125%;
         padding: 0px;
         padding-left: 0px;
-        padding-top: 5px;
+        padding-top: 30px;
         margin: 0px;
-        margin-top: 5px;
+        margin-top: 32px;
         margin-left: 10px;
+      }
+
+      #history, #tabs, #bookmarks{
+        vertical-align: text-top;
+        width: 580px;
+      }
+
+      #results{
+        z-index: 9;
+        left: -600px;
+        padding-left: 0px;
+        padding-top: 0px;
+        margin: 0px;
+        margin-top: 0px;
+        margin-left: 10px;
+        position: fixed;
+      }
+
+      #results td {
+        vertical-align: top;
+        padding-top: 0px;
+        margin-top: 0px;
+        width: 580px;
+        /*overflow: hidden;*/
+        /*text-overflow: ellipsis;*/
+      }
+
+      table#filters{
+        z-index: -1;
+        color: #e0e2e4;
+        font-size: 120%;
+        table-layout: fixed;
+        width: 100%;
+      }
+
+      tr#filters{
+        width: 100%;
+      }
+
+      #filters td{
+        width: 33%;
+        text-align: center;
+        border-spacing: 0px;
+        border-right: 1px solid #3b4a50;
+        border-left: 1px solid #3b4a50;
       }
 
       .urladdr{
@@ -47,23 +97,27 @@
       }
 
       li{
-        padding-left: 5px; 
-        
+        padding-left: 5px;  
         border-bottom: 1px solid #556367;
         border-top: 1px solid #556367;
       }
     </style>
-    <!--
-      - JavaScript and HTML must be in separate files: see our Content Security
-      - Policy documentation[1] for details and explanation.
-      -
-      - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
-     -->
     <script src="popup.js"></script>
   </head>
   <body>
-    <input type="text" id="search"><br>
-    <ul id="bookmarks"></p>
+    <div id="searchspace">
+      <input type="text" id="search"><br>
+      <center><table id="filters"><tr><td id="tbs" class="res">Tabs</td><td id="bkmarks" class="res">Bookmarks</td><td id="hstr" class="res">History</td></tr></table></center>
+    </div>
+    <div id="results">
+      <table>
+        <tr>
+          <td><ul id="tabs"></p></ul></td>
+          <td><ul id="bookmarks"></p></ul></td>
+          <td><ul id="history"></p></ul></td>
+        </tr>
+      </table>
+    </div>
   </body>
 </html>
 
