@@ -37,34 +37,42 @@ function isMatch(str, q){
     return index;
 }
 
-function srch(item, query){
-    var predicate;
+function srch(item, query, parent){
+    var predicate = false;
     
     if (query && !item.children) {
         //if '@' search this element's title of exact match
         if(query.indexOf('@') == 0){
             q = query.substring(1);
             predicate = String(item.title.toLowerCase()).indexOf(q.toLowerCase()) == -1;
+            return predicate;
         }
         //if '#' search this element's url for exact match
-        else if(query.indexOf('#') == 0){
+        if(query.indexOf('#') == 0){
             q = query.substring(1);
             predicate = String(item.url.toLowerCase()).indexOf(q.toLowerCase()) == -1;
+            return predicate;
         }
         //else search this element's title for fuzzy match and url for exact match
-        else{
-            // ind = isMatch(String(item.title.toLowerCase()), query.toLowerCase());
-            // predicate = (ind==-1 && String(item.url.toLowerCase()).indexOf(query.toLowerCase()) == -1);   
-
-            var queries = query.split(' ');
-
-            for(i=0; i<queries.length; i++){
-                if(String(item.title.toLowerCase()).indexOf(queries[i].toLowerCase())==-1 && String(item.url.toLowerCase()).indexOf(queries[i].toLowerCase())==-1) return true;
+        if($('[data-search-selected=true]').attr('id')=='bkmarks' && query.indexOf('>')==0){
+            q = query.substring(1);
+            var queries = q.split(' ');
+            for(var i=0; i<queries.length; i++){
+                if(parent.toLowerCase().indexOf(queries[i].toLowerCase())==-1) return true;
             }
-            predicate = false;
+          return predicate;  
         }
+
+        // ind = isMatch(String(item.title.toLowerCase()), query.toLowerCase());
+        // predicate = (ind==-1 && String(item.url.toLowerCase()).indexOf(query.toLowerCase()) == -1);   
+
+        var queries = query.split(' ');
+
+        for(i=0; i<queries.length; i++){
+            if(String(item.title.toLowerCase()).indexOf(queries[i].toLowerCase())==-1 && String(item.url.toLowerCase()).indexOf(queries[i].toLowerCase())==-1) return true;
+        }
+        return predicate;
     }
-    return predicate;
 }
 
 function dumpNode(bookmarkNode, query, parent) {
@@ -73,7 +81,7 @@ function dumpNode(bookmarkNode, query, parent) {
     temp = String(bookmarkNode.title);
 
     //if there is no match return empty element
-    var predicate = srch(bookmarkNode, query);
+    var predicate = srch(bookmarkNode, query, parent);
     if(predicate == true){
         return $('<span></span>');
     }
@@ -113,7 +121,7 @@ function dumpTabs(query){
         //go through all the open tabs
         for(j=0; j<tabs.length; j++){
             //if a tab already exists with this url bring that tab forth, along with its window
-            var predicate = srch(tabs[j], query);
+            var predicate = srch(tabs[j], query, '');
             if(predicate == true){
                 continue;
             }

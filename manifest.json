@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
 
-  "name": "Fuzzy Bookmarks",
+  "name": "Go2Anywhere",
   "description": "This extension allows you to quickly search through your bookmarks, open tabs and history.",
   "version": "1.0",
   "icons": { "16": "images/icon16.png",
