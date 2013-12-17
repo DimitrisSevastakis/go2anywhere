@@ -1,8 +1,13 @@
 // Traverse the bookmark tree, and print the folder and nodes.
+var timeouts = {};
+//add bookmarks to the bookmark section
 function dumpBookmarks(query) {
-    $('#bookmarks').empty();
+    $('#bookmarks > div').empty();
+    //get the bookmarks tree
     chrome.bookmarks.getTree(function(bookmarkTreeNodes) {
+        //parse tree and add leaves to the list
        dumpTreeNodes(bookmarkTreeNodes, query, '/');
+       if($('#bookmarks li').length == 0) $('#bookmarks > div').append('<center><li>No Item Found</li></center>');
        $('#bookmarks .selectable').click(function(event){
             $('#'+ getTarget($('[data-search-selected=true]').attr('id')) +' li[data-selected=true]').css('background-color', '#293134').attr('data-selected', false);
             $(this).css('background-color', '#3b4a50').attr('data-selected', true).attr('data-ind', 0);
@@ -48,8 +53,15 @@ function srch(item, query){
         }
         //else search this element's title for fuzzy match and url for exact match
         else{
-            ind = isMatch(String(item.title.toLowerCase()), query.toLowerCase());
-            predicate = (ind==-1 && String(item.url.toLowerCase()).indexOf(query.toLowerCase()) == -1);            
+            // ind = isMatch(String(item.title.toLowerCase()), query.toLowerCase());
+            // predicate = (ind==-1 && String(item.url.toLowerCase()).indexOf(query.toLowerCase()) == -1);   
+
+            var queries = query.split(' ');
+
+            for(i=0; i<queries.length; i++){
+                if(String(item.title.toLowerCase()).indexOf(queries[i].toLowerCase())==-1 && String(item.url.toLowerCase()).indexOf(queries[i].toLowerCase())==-1) return true;
+            }
+            predicate = false;
         }
     }
     return predicate;
@@ -71,7 +83,7 @@ function dumpNode(bookmarkNode, query, parent) {
     anchor.html(temp);
     span.append(anchor);
 
-    var li = $(bookmarkNode.title ? '<li class="selectable">' : '<div>').append(span);
+    var li = $('<li class="selectable">').append(span);
 
     if (bookmarkNode.children && bookmarkNode.children.length > 0) {
         var par = (!String(bookmarkNode.title)) ? parent : parent+'/' + bookmarkNode.title
@@ -82,7 +94,7 @@ function dumpNode(bookmarkNode, query, parent) {
         li.attr('href', bookmarkNode.url);
     }
 
-    if(!bookmarkNode.children) $('#bookmarks').append(li);
+    if(!bookmarkNode.children) $('#bookmarks > div').append(li);
     
     //select the first bookmark in the list
     $('#bookmarks li[data-selected=true]').css('background-color', '#293134').attr('data-selected', false);
@@ -91,8 +103,12 @@ function dumpNode(bookmarkNode, query, parent) {
 
 function dumpTabs(query){
     $('#tbs').attr('data-last-search', query);
-    $('#tabs').empty();
+    $('#tabs > div').empty();
     chrome.tabs.query({},function(tabs){
+        if(tabs.length == 0){
+            $('#tabs > div').append('<center><li>No Item Found</li></center>');
+            return;
+        }
         var j;
         //go through all the open tabs
         for(j=0; j<tabs.length; j++){
@@ -107,17 +123,16 @@ function dumpTabs(query){
             var span = $('<span>');
             anchor.html(title);
             span.append(anchor);
-            var li = $(title ? '<li class="selectable">' : '<div>').append(span);
+            var li = $('<li class="selectable">').append(span);
 
             li.append('<p class="urladdr">' + tabs[j].url +'</p>');
             li.attr('href', tabs[j].url);
-            $('#tabs').append(li);
+            $('#tabs > div').append(li);
             
             // //select the first tab in the list
             $('#tabs li[data-selected=true]').css('background-color', '#293134').attr('data-selected', false);
             $('#tabs li:first').css('background-color', '#3b4a50').attr('data-selected', true).attr('data-ind', 0);
         }
-
         $('#tabs .selectable').click(function(event){
             $('#'+ getTarget($('[data-search-selected=true]').attr('id')) +' li[data-selected=true]').css('background-color', '#293134').attr('data-selected', false);
             $(this).css('background-color', '#3b4a50').attr('data-selected', true).attr('data-ind', 0);
@@ -128,8 +143,14 @@ function dumpTabs(query){
 
 function dumpHistory(query, increment){
     $('#hstr').attr('data-last-search', query);
-    $('#history').empty();
+    if(increment!=parseInt($('#hstr').attr('data-search-increment'))) return;
+    $('#history > div').empty();
     chrome.history.search({'text': query, 'maxResults': 50},function(history){
+        if(increment!=parseInt($('#hstr').attr('data-search-increment'))) return;
+        if(history.length == 0){
+            $('#history > div').append('<center><li>No Item Found</li></center>');
+            return;
+        }
         var j;
         var visit_count = new Array();
         var list = [];
@@ -159,13 +180,12 @@ function dumpHistory(query, increment){
 
             li.append('<p class="urladdr">' + history[j].url +'</p>');
             li.attr('href', history[j].url);
-            $('#history').append(li);
+            $('#history > div').append(li);
             
             // //select the first tab in the list
             $('#history li[data-selected=true]').css('background-color', '#293134').attr('data-selected', false);
             $('#history li:first').css('background-color', '#3b4a50').attr('data-selected', true).attr('data-ind', 0);
         }
-
         $('#history .selectable').click(function(event){
             $('#'+ getTarget($('[data-search-selected=true]').attr('id')) +' li[data-selected=true]').css('background-color', '#293134').attr('data-selected', false);
             $(this).css('background-color', '#3b4a50').attr('data-selected', true).attr('data-ind', 0);
@@ -229,9 +249,12 @@ function moveUp(item){
     s = $('#' + target+ ' li[data-selected=true]');
     if(parseInt(s.attr('data-ind'))>0){
         s.css('background-color', '#293134').attr('data-selected', false);
-        $('#' + target+ ' li').eq(parseInt(s.attr('data-ind'))-1).css('background-color', '#3b4a50').attr('data-selected', true).attr('data-ind', parseInt(s.attr('data-ind'))-1);
+        next = $('#' + target+ ' li').eq(parseInt(s.attr('data-ind'))-1);
+        next.css('background-color', '#3b4a50').attr('data-selected', true).attr('data-ind', parseInt(s.attr('data-ind'))-1);
+        if((s.offset().top)<130){
+            $('#'+target +' > div').scrollTop( $('#'+target +' > div').scrollTop() - s.height() - 2);   
+        } 
     }
-
 }
 
 function moveDown(item){
@@ -239,7 +262,11 @@ function moveDown(item){
     s = $('#' + target+ ' li[data-selected=true]');
     if(parseInt(s.attr('data-ind'))<$('#' + target+ ' li').length-1){
         s.css('background-color', '#293134').attr('data-selected', false);
-        $('#' + target+ ' li').eq(parseInt(s.attr('data-ind'))+1).css('background-color', '#3b4a50').attr('data-selected', true).attr('data-ind', parseInt(s.attr('data-ind'))+1);
+        next = $('#' + target+ ' li').eq(parseInt(s.attr('data-ind'))+1);
+        next.css('background-color', '#3b4a50').attr('data-selected', true).attr('data-ind', parseInt(s.attr('data-ind'))+1);
+        if((next.offset().top+next.height())>450){
+            $('#'+target +' > div').scrollTop( $('#'+target +' > div').scrollTop() + next.height() + 2);
+        } 
     }
 }
 
@@ -258,13 +285,21 @@ function loadBookmarks(){
 }
 
 function loadHistory(){
-    increment = parseInt($('#hstr').attr('data-search-increment'));
+    increment = $('#hstr').attr('data-search-increment');
     increment++;
     $('#hstr').attr('data-search-increment', increment);
-    if($('#hstr').attr('data-last-search') != $('#search').val() || $('#history li').length==0) dumpHistory($('#search').val(),increment);
+    var q = $('#search').val();
+
+    if(String($('#hstr').attr('data-last-search')) !== q || $('#history li').length==0) dumpHistory(q,increment);
     $('#results').animate({left: "-1200px"}, 250);
     $('.res').css('background-color', '#293134').attr('data-search-selected', false);
     $('#hstr').css('background-color', '#3b4a50').attr('data-search-selected', true);
+}
+
+function createHistoryAlarm(){
+    chrome.alarms.clear('history_update');
+    chrome.alarms.create('history_update',{when:Date.now()+500});
+
 }
 
 //when the extension window is loaded do:
@@ -276,6 +311,7 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#filters td').attr('data-search-selected', false);
     $('#bkmarks').css('background-color', '#3b4a50').attr('data-search-selected', true);
     $('.res').attr('data-last-search', '');
+    chrome.alarms.onAlarm.addListener(loadHistory);
 
     $(function() {
         //on every key input check if 'enter' 'arrow-up' or 'arrow-down'
@@ -298,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function () {
             searchIn = String($('[data-search-selected=true]').attr('id'));
             if(searchIn == 'bkmarks') loadBookmarks();
             else if(searchIn == 'tbs') loadTabs();
-            else if(searchIn == 'hstr') loadHistory();
+            else if(searchIn == 'hstr') createHistoryAlarm();
         });
 
         $('body').keydown(function(event) {
@@ -338,6 +374,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     }
                     break;
+                default:
+                    $('#search').focus();
             }
         });
     });
