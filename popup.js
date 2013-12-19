@@ -1,5 +1,9 @@
 // Traverse the bookmark tree, and print the folder and nodes.
 var timeouts = {};
+var emptyList = '<center><li>No Item Found</li></center>';
+var selected_search = '[data-search-selected=true]';
+var selected_item = 'li[data-selected=true]';
+
 //add bookmarks to the bookmark section
 function dumpBookmarks(query) {
     $('#bookmarks > div').empty();
@@ -7,10 +11,10 @@ function dumpBookmarks(query) {
     chrome.bookmarks.getTree(function(bookmarkTreeNodes) {
         //parse tree and add leaves to the list
        dumpTreeNodes(bookmarkTreeNodes, query, '/');
-       if($('#bookmarks li').length == 0) $('#bookmarks > div').append('<center><li>No Item Found</li></center>');
+       if($('#bookmarks li').length == 0) $('#bookmarks > div').append(emptyList);
        $('#bookmarks .selectable').click(function(event){
-            $('#'+ getTarget($('[data-search-selected=true]').attr('id')) +' li[data-selected=true]').css('background-color', '#293134').attr('data-selected', false);
-            $(this).css('background-color', '#3b4a50').attr('data-selected', true).attr('data-ind', 0);
+            $('#'+ getTarget($(selected_search).attr('id')) +' '+ selected_item).attr('data-selected', false);
+            $(this).attr('data-selected', true).attr('data-ind', 0);
             handleSelect('bkmarks');
         });
     });
@@ -54,7 +58,7 @@ function srch(item, query, parent){
             return predicate;
         }
         //else search this element's title for fuzzy match and url for exact match
-        if($('[data-search-selected=true]').attr('id')=='bkmarks' && query.indexOf('>')==0){
+        if($(selected_search).attr('id')=='bkmarks' && query.indexOf('>')==0){
             q = query.substring(1);
             var queries = q.split(' ');
             for(var i=0; i<queries.length; i++){
@@ -105,8 +109,8 @@ function dumpNode(bookmarkNode, query, parent) {
     if(!bookmarkNode.children) $('#bookmarks > div').append(li);
     
     //select the first bookmark in the list
-    $('#bookmarks li[data-selected=true]').css('background-color', '#293134').attr('data-selected', false);
-    $('#bookmarks li:first').css('background-color', '#3b4a50').attr('data-selected', true).attr('data-ind', 0);
+    $('#bookmarks '+ selected_item).attr('data-selected', false);
+    $('#bookmarks li:first').attr('data-selected', true).attr('data-ind', 0);
 }
 
 function dumpTabs(query){
@@ -114,7 +118,7 @@ function dumpTabs(query){
     $('#tabs > div').empty();
     chrome.tabs.query({},function(tabs){
         if(tabs.length == 0){
-            $('#tabs > div').append('<center><li>No Item Found</li></center>');
+            $('#tabs > div').append(emptyList);
             return;
         }
         var j;
@@ -138,12 +142,12 @@ function dumpTabs(query){
             $('#tabs > div').append(li);
             
             // //select the first tab in the list
-            $('#tabs li[data-selected=true]').css('background-color', '#293134').attr('data-selected', false);
-            $('#tabs li:first').css('background-color', '#3b4a50').attr('data-selected', true).attr('data-ind', 0);
+            $('#tabs '+ selected_item).attr('data-selected', false);
+            $('#tabs li:first').attr('data-selected', true).attr('data-ind', 0);
         }
         $('#tabs .selectable').click(function(event){
-            $('#'+ getTarget($('[data-search-selected=true]').attr('id')) +' li[data-selected=true]').css('background-color', '#293134').attr('data-selected', false);
-            $(this).css('background-color', '#3b4a50').attr('data-selected', true).attr('data-ind', 0);
+            $('#'+ getTarget($(selected_search).attr('id')) +' '+ selected_item).attr('data-selected', false);
+            $(this).attr('data-selected', true).attr('data-ind', 0);
             handleSelect('tbs');
         });
     });
@@ -156,7 +160,7 @@ function dumpHistory(query, increment){
     chrome.history.search({'text': query, 'maxResults': 50},function(history){
         if(increment!=parseInt($('#hstr').attr('data-search-increment'))) return;
         if(history.length == 0){
-            $('#history > div').append('<center><li>No Item Found</li></center>');
+            $('#history > div').append(emptyList);
             return;
         }
         var j;
@@ -191,12 +195,12 @@ function dumpHistory(query, increment){
             $('#history > div').append(li);
             
             // //select the first tab in the list
-            $('#history li[data-selected=true]').css('background-color', '#293134').attr('data-selected', false);
-            $('#history li:first').css('background-color', '#3b4a50').attr('data-selected', true).attr('data-ind', 0);
+            $('#history '+ selected_item).attr('data-selected', false);
+            $('#history li:first').attr('data-selected', true).attr('data-ind', 0);
         }
         $('#history .selectable').click(function(event){
-            $('#'+ getTarget($('[data-search-selected=true]').attr('id')) +' li[data-selected=true]').css('background-color', '#293134').attr('data-selected', false);
-            $(this).css('background-color', '#3b4a50').attr('data-selected', true).attr('data-ind', 0);
+            $('#'+ getTarget($(selected_search).attr('id')) +' '+ selected_item).attr('data-selected', false);
+            $(this).attr('data-selected', true).attr('data-ind', 0);
             handleSelect('hstr');
         });
     });
@@ -207,7 +211,7 @@ function dumpHistory(query, increment){
 function handleSelect(item){
     //get all open tabs
     chrome.tabs.query({},function(tabs){
-        var s = $('#'+getTarget(item)+' li[data-selected=true]');
+        var s = $('#'+getTarget(item)+' '+ selected_item);
         var j;
         var tab_exists = false;
         //go through all the open tabs
@@ -227,7 +231,7 @@ function handleSelect(item){
         if(!tab_exists){
             //get the currently focused tab
             chrome.tabs.getSelected(function(tab){
-                var s = $('#'+getTarget(item)+' li[data-selected=true]');
+                var s = $('#'+getTarget(item)+' '+ selected_item);
                 if(tab.title == 'New Tab'){
                 //if it is the 'New Tab' page open the url in the current tab
                     chrome.tabs.update(tab.id, {url: s.attr('href')});
@@ -254,11 +258,11 @@ function getTarget(item){
 
 function moveUp(item){
     var target = getTarget(item);
-    s = $('#' + target+ ' li[data-selected=true]');
+    s = $('#' + target+ ' '+ selected_item);
     if(parseInt(s.attr('data-ind'))>0){
-        s.css('background-color', '#293134').attr('data-selected', false);
+        s.attr('data-selected', false);
         next = $('#' + target+ ' li').eq(parseInt(s.attr('data-ind'))-1);
-        next.css('background-color', '#3b4a50').attr('data-selected', true).attr('data-ind', parseInt(s.attr('data-ind'))-1);
+        next.attr('data-selected', true).attr('data-ind', parseInt(s.attr('data-ind'))-1);
         if((s.offset().top)<130){
             $('#'+target +' > div').scrollTop( $('#'+target +' > div').scrollTop() - s.height() - 2);   
         } 
@@ -267,11 +271,11 @@ function moveUp(item){
 
 function moveDown(item){
     var target = getTarget(item);
-    s = $('#' + target+ ' li[data-selected=true]');
+    s = $('#' + target+ ' '+ selected_item);
     if(parseInt(s.attr('data-ind'))<$('#' + target+ ' li').length-1){
-        s.css('background-color', '#293134').attr('data-selected', false);
+        s.attr('data-selected', false);
         next = $('#' + target+ ' li').eq(parseInt(s.attr('data-ind'))+1);
-        next.css('background-color', '#3b4a50').attr('data-selected', true).attr('data-ind', parseInt(s.attr('data-ind'))+1);
+        next.attr('data-selected', true).attr('data-ind', parseInt(s.attr('data-ind'))+1);
         if((next.offset().top+next.height())>450){
             $('#'+target +' > div').scrollTop( $('#'+target +' > div').scrollTop() + next.height() + 2);
         } 
@@ -281,15 +285,15 @@ function moveDown(item){
 function loadTabs(){
     if($('#tbs').attr('data-last-search') != $('#search').val() || $('#tabs li').length==0) dumpTabs($('#search').val());
     $('#results').animate({left: "0px"}, 250);
-    $('.res').css('background-color', '#293134').attr('data-search-selected', false);
-    $('#tbs').css('background-color', '#3b4a50').attr('data-search-selected', true);
+    $('.res').attr('data-search-selected', false);
+    $('#tbs').attr('data-search-selected', true);
 }
 
 function loadBookmarks(){
     if($('#bkmarks').attr('data-last-search') != $('#search').val()) dumpBookmarks($('#search').val()); 
     $('#results').animate({left: "-600px"}, 250);
-    $('.res').css('background-color', '#293134').attr('data-search-selected', false);
-    $('#bkmarks').css('background-color', '#3b4a50').attr('data-search-selected', true);
+    $('.res').attr('data-search-selected', false);
+    $('#bkmarks').attr('data-search-selected', true);
 }
 
 function loadHistory(){
@@ -300,8 +304,8 @@ function loadHistory(){
 
     if(String($('#hstr').attr('data-last-search')) !== q || $('#history li').length==0) dumpHistory(q,increment);
     $('#results').animate({left: "-1200px"}, 250);
-    $('.res').css('background-color', '#293134').attr('data-search-selected', false);
-    $('#hstr').css('background-color', '#3b4a50').attr('data-search-selected', true);
+    $('.res').attr('data-search-selected', false);
+    $('#hstr').attr('data-search-selected', true);
 }
 
 function createHistoryAlarm(){
@@ -311,13 +315,13 @@ function createHistoryAlarm(){
 }
 
 //when the extension window is loaded do:
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {    
     //get bookmarks
     dumpBookmarks();
     $('#hstr').attr('data-search-increment', 0);
     //select bookmarks as the default search
     $('#filters td').attr('data-search-selected', false);
-    $('#bkmarks').css('background-color', '#3b4a50').attr('data-search-selected', true);
+    $('#bkmarks').attr('data-search-selected', true);
     $('.res').attr('data-last-search', '');
     chrome.alarms.onAlarm.addListener(loadHistory);
 
@@ -326,27 +330,27 @@ document.addEventListener('DOMContentLoaded', function () {
         $('.res').click(function(event){
             switch(event.target.id){
                 case 'tbs':
-                    if($('[data-search-selected=true]').attr('id') != 'tbs') loadTabs();
+                    if($(selected_search).attr('id') != 'tbs') loadTabs();
                     break;
                 case 'bkmarks':
-                    if($('[data-search-selected=true]').attr('id') != 'bkmarks') loadBookmarks();
+                    if($(selected_search).attr('id') != 'bkmarks') loadBookmarks();
                     break;
                 case 'hstr':
-                    if($('[data-search-selected=true]').attr('id') != 'hstr') loadHistory();
+                    if($(selected_search).attr('id') != 'hstr') loadHistory();
                     break;
             }
         });
 
         $('#search').bind('input',function(event) {
             //default: filter bookmarks
-            searchIn = String($('[data-search-selected=true]').attr('id'));
+            searchIn = String($(selected_search).attr('id'));
             if(searchIn == 'bkmarks') loadBookmarks();
             else if(searchIn == 'tbs') loadTabs();
             else if(searchIn == 'hstr') createHistoryAlarm();
         });
 
         $('body').keydown(function(event) {
-            searchIn = String($('[data-search-selected=true]').attr('id'));
+            searchIn = String($(selected_search).attr('id'));
             switch(event.which){
                 case 13:
                     //case enter open selected bookmark

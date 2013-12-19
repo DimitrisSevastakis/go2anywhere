@@ -1,0 +1,144 @@
+body {
+    width: 600px;
+    height: 800px;
+    background: #d5d5d5;
+    overflow: hidden;
+}
+
+* { font-family: 'Roboto', sans-serif; line-height:1.2; vertical-align:middle; }
+
+#search{
+    width: 100%;
+    font-size: 150%;
+}
+
+#searchspace{
+    z-index: 10;
+    position: fixed;
+    top:10px;
+    margin-left: 10px;
+    width: 580px;
+}
+
+.bookmark_path{
+    line-height:2.5;
+    color:gray;
+    font-weight:400;
+}
+
+a,p{
+    margin-top: 2px;
+    margin-bottom: 2px;
+    margin-left: 10px;
+}
+
+ul{
+    list-style-type: none;
+    color: blue;
+    font-size: 125%;
+    padding: 0px;
+    padding-left: 0px;
+    padding-top: 30px;
+    margin: 0px;
+    margin-top: 32px;
+    margin-left: 10px;
+}
+
+#history, #tabs, #bookmarks{
+    vertical-align: text-top;
+    width: 580px;
+}
+
+#results{
+    z-index: 9;
+    left: -600px;
+    padding-left: 0px;
+    padding-top: 0px;
+    margin: 0px;
+    margin-top: 10px;
+    margin-left: 10px;
+    position: fixed;
+}
+
+#results td {
+    vertical-align: top;
+    padding-top: 0px;
+    margin-top: 0px;
+    width: 580px;
+    height:  750px;
+}
+
+#results div{
+    height: 740px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+table#filters{
+    background-color: white;
+    z-index: -1;
+    color: #777;
+    font-size: 120%;
+    table-layout: fixed;
+    width: 100%;
+}
+
+tr#filters{
+    width: 100%;
+}
+
+#filters td{
+    width: 33%;
+    text-align: center;
+    border-spacing: 0px;
+}
+
+#filters #tbs{
+    border-right: 1px solid #777;
+}
+
+#filters #hstr{
+    border-left: 1px solid #777;
+}
+
+.urladdr{
+    font-size: 70%;
+    color: green;
+}
+
+li{
+ padding:5px;
+ box-shadow:0 1px 2px #aaa;
+ background:white;
+ margin:0 5px 5px;
+ border-radius:3px;
+ animation:fly-in-from-left .5s 1s ease both;
+ transform-origin:top left;
+}
+
+li[data-selected=true], #filters td[data-search-selected=true]{
+    background-color: #eeeeee;
+}
+
+/* Let's get this party started */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: rgba(71,71,71,1); 
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+::-webkit-scrollbar-thumb:window-inactive {
+    background: rgba(71,71,71,1); 
+}

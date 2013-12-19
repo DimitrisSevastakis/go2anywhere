@@ -13,7 +13,6 @@
     "bookmarks",
     "history",
     "alarms"
-
   ],
 
   "browser_action": {
