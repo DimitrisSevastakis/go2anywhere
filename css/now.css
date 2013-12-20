@@ -1,23 +1,40 @@
-body {
+html{
+    height: 580px;
     width: 600px;
-    height: 800px;
-    background: #d5d5d5;
-    overflow: hidden;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: #ededed;
 }
 
 * { font-family: 'Roboto', sans-serif; line-height:1.2; vertical-align:middle; }
 
 #search{
-    width: 100%;
+    width: 90%;
     font-size: 150%;
 }
 
 #searchspace{
+    text-align: center;
+    height: 100px;
+    background-image:url('../images/googlenownewyork.png');
+    background-position:50% 55%;
     z-index: 10;
     position: fixed;
-    top:10px;
+    top:0px;
+    left:0px;
+    right: 0px;
+    margin-right: 0px;
+}
+
+#tf{
     margin-left: 10px;
     width: 580px;
+    margin-top:10px;
 }
 
 .bookmark_path{
@@ -50,13 +67,14 @@ ul{
 }
 
 #results{
+    width: 100%
     z-index: 9;
     left: -600px;
     padding-left: 0px;
     padding-top: 0px;
     margin: 0px;
-    margin-top: 10px;
-    margin-left: 10px;
+    margin-top: 35px;
+    margin-left: 0px;
     position: fixed;
 }
 
@@ -64,12 +82,18 @@ ul{
     vertical-align: top;
     padding-top: 0px;
     margin-top: 0px;
-    width: 580px;
-    height:  750px;
+    width: 600px;
+}
+
+
+#results table{
+    margin-left: 0;
+    padding-left: 0;
+    text-align: left;
 }
 
 #results div{
-    height: 740px;
+    height: 480px;
     overflow-y: scroll;
     overflow-x: hidden;
 }
@@ -80,15 +104,15 @@ table#filters{
     color: #777;
     font-size: 120%;
     table-layout: fixed;
-    width: 100%;
+    width: 90%;
 }
 
 tr#filters{
-    width: 100%;
+    width: 90%;
 }
 
 #filters td{
-    width: 33%;
+    width: 30%;
     text-align: center;
     border-spacing: 0px;
 }
@@ -107,17 +131,21 @@ tr#filters{
 }
 
 li{
+overflow: hidden;
  padding:5px;
  box-shadow:0 1px 2px #aaa;
  background:white;
- margin:0 5px 5px;
+ margin-top: 8px;
+ margin-bottom: 8px;
+ margin-left: 0px;
+ margin-right: 12px;
  border-radius:3px;
  animation:fly-in-from-left .5s 1s ease both;
  transform-origin:top left;
 }
 
 li[data-selected=true], #filters td[data-search-selected=true]{
-    background-color: #eeeeee;
+    background-color: #bbbbbb;
 }
 
 /* Let's get this party started */

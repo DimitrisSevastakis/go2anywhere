@@ -263,8 +263,10 @@ function moveUp(item){
         s.attr('data-selected', false);
         next = $('#' + target+ ' li').eq(parseInt(s.attr('data-ind'))-1);
         next.attr('data-selected', true).attr('data-ind', parseInt(s.attr('data-ind'))-1);
-        if((s.offset().top)<130){
-            $('#'+target +' > div').scrollTop( $('#'+target +' > div').scrollTop() - s.height() - 2);   
+        //if((s.offset().top)<$('#searchspace').offset().top+$('#searchspace').height()){
+        if((next.offset().top)-5<$('#searchspace').height() + $('#searchspace').offset().top || (next.offset().top+next.height())>$('body').height()){
+            offset_top = next.offset().top - next.parent().offset().top + $('#'+target +' > div').scrollTop();
+            $('#'+target +' > div').scrollTop(offset_top -5);   
         } 
     }
 }
@@ -276,8 +278,9 @@ function moveDown(item){
         s.attr('data-selected', false);
         next = $('#' + target+ ' li').eq(parseInt(s.attr('data-ind'))+1);
         next.attr('data-selected', true).attr('data-ind', parseInt(s.attr('data-ind'))+1);
-        if((next.offset().top+next.height())>450){
-            $('#'+target +' > div').scrollTop( $('#'+target +' > div').scrollTop() + next.height() + 2);
+        if((next.offset().top+next.height())>$('body').height() || (next.offset().top)-5<$('#searchspace').height() + $('#searchspace').offset().top){
+            offset_top = next.offset().top - next.parent().offset().top + $('#'+target +' > div').scrollTop();
+            $('#'+target +' > div').scrollTop(offset_top + next.height() - $('#'+target +' > div').height() + 5 + parseInt(next.css("margin-bottom").replace('px','')));
         } 
     }
 }
@@ -315,7 +318,14 @@ function createHistoryAlarm(){
 }
 
 //when the extension window is loaded do:
-document.addEventListener('DOMContentLoaded', function () {    
+document.addEventListener('DOMContentLoaded', function () {   
+    theme = localStorage["selected_theme"];
+    if(theme){
+        $('head').append('<link rel="stylesheet" type="text/css" href="css/'+theme+'.css">');
+    } 
+    else{
+        $('head').append('<link rel="stylesheet" type="text/css" href="css/default.css">');
+    }
     //get bookmarks
     dumpBookmarks();
     $('#hstr').attr('data-search-increment', 0);
