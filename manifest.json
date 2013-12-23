@@ -12,7 +12,8 @@
     "tabs",
     "bookmarks",
     "history",
-    "alarms"
+    "alarms",
+    "chrome://favicon/"
   ],
 
   "options_page": "options.html",

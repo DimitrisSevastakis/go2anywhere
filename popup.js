@@ -95,8 +95,9 @@ function dumpNode(bookmarkNode, query, parent) {
     anchor.html(temp);
     span.append(anchor);
 
-    var li = $('<li class="selectable">').append(span);
-
+    var li = $('<li class="selectable">');
+    // li.append('<div class="imgholder"><img class="bmtn" src="chrome://favicon/'+bookmarkNode.url+'"/></div>');
+    li.append(span);
     if (bookmarkNode.children && bookmarkNode.children.length > 0) {
         var par = (!String(bookmarkNode.title)) ? parent : parent+'/' + bookmarkNode.title
         dumpTreeNodes(bookmarkNode.children, query, par.replace('//', '/'));
@@ -215,6 +216,7 @@ function handleSelect(item){
         var j;
         var tab_exists = false;
         //go through all the open tabs
+        // chrome.tts.speak('<?xml version="1.0"?><speak>opening <emphasis>' + $('#'+getTarget(item)+' '+ selected_item + ' > span').text() + '</emphasis></speak>');
         for(j=0; j<tabs.length; j++){
             //if a tab already exists with this url bring that tab forth, along with its window
             if(tabs[j].url.replace('http://', '') == s.attr('href').replace('http://', '')){
@@ -245,6 +247,8 @@ function handleSelect(item){
 }
 
 function getTarget(item){
+    //given the filter id, it returns the id of the 
+    //corresponding result section
     var target;
     if(item=='bkmarks')
         target = 'bookmarks';
@@ -252,11 +256,11 @@ function getTarget(item){
         target = 'tabs';
     else if (item == 'hstr')
         target = 'history';
-
     return target;
 }
 
 function moveUp(item){
+    //moves up the cursor by one item
     var target = getTarget(item);
     s = $('#' + target+ ' '+ selected_item);
     if(parseInt(s.attr('data-ind'))>0){
@@ -272,6 +276,7 @@ function moveUp(item){
 }
 
 function moveDown(item){
+    //moves down the cursor by one item
     var target = getTarget(item);
     s = $('#' + target+ ' '+ selected_item);
     if(parseInt(s.attr('data-ind'))<$('#' + target+ ' li').length-1){
@@ -280,7 +285,7 @@ function moveDown(item){
         next.attr('data-selected', true).attr('data-ind', parseInt(s.attr('data-ind'))+1);
         if((next.offset().top+next.height())>$('body').height() || (next.offset().top)-5<$('#searchspace').height() + $('#searchspace').offset().top){
             offset_top = next.offset().top - next.parent().offset().top + $('#'+target +' > div').scrollTop();
-            $('#'+target +' > div').scrollTop(offset_top + next.height() - $('#'+target +' > div').height() + 5 + parseInt(next.css("margin-bottom").replace('px','')));
+            $('#'+target +' > div').scrollTop(offset_top + next.height() - $('#'+target +' > div').height() + 10 + parseInt(next.css("margin-bottom").replace('px','')));
         } 
     }
 }
@@ -317,11 +322,25 @@ function createHistoryAlarm(){
 
 }
 
+function applyThemeSettings(theme){
+    switch(theme){
+        case 'now':
+            time = (new Date()).getHours();
+            if(time <6 || time > 20){
+                $('#searchspace').css({"background-image" : "url(../images/googlenow2.jpg)"});
+            }
+            break;
+        default:
+        //do nothing
+    }
+}
+
 //when the extension window is loaded do:
-document.addEventListener('DOMContentLoaded', function () {   
+document.addEventListener('DOMContentLoaded', function () { 
     theme = localStorage["selected_theme"];
     if(theme){
         $('head').append('<link rel="stylesheet" type="text/css" href="css/'+theme+'.css">');
+        applyThemeSettings(theme);
     } 
     else{
         $('head').append('<link rel="stylesheet" type="text/css" href="css/default.css">');
