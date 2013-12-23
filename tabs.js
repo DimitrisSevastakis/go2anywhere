@@ -1,0 +1,46 @@
+function loadTabs(){
+    if($('#tbs').attr('data-last-search') != $('#search').val() || $('#tabs li').length==0) dumpTabs($('#search').val());
+    $('#results').animate({left: "0px"}, 250);
+    $('.res').attr('data-search-selected', false);
+    $('#tbs').attr('data-search-selected', true);
+}
+
+function dumpTabs(query){
+    $('#tbs').attr('data-last-search', query);
+    $('#tabs > div').empty();
+    chrome.tabs.query({},function(tabs){
+        if(tabs.length == 0){
+            $('#tabs > div').append(emptyList);
+            return;
+        }
+        var j;
+        //go through all the open tabs
+        for(j=0; j<tabs.length; j++){
+            //if a tab already exists with this url bring that tab forth, along with its window
+            var predicate = srch(tabs[j], query, '');
+            if(predicate == true){
+                continue;
+            }
+            var title = tabs[j].title;
+            var url = tabs[j].url;
+            var anchor = $('<p>');
+            var span = $('<span>');
+            anchor.html(title);
+            span.append(anchor);
+            var li = $('<li class="selectable">').append(span);
+
+            li.append('<p class="urladdr">' + tabs[j].url +'</p>');
+            li.attr('href', tabs[j].url);
+            $('#tabs > div').append(li);
+            
+            // //select the first tab in the list
+            $('#tabs '+ selected_item).attr('data-selected', false);
+            $('#tabs li:first').attr('data-selected', true).attr('data-ind', 0);
+        }
+        $('#tabs .selectable').click(function(event){
+            $('#'+ getTarget($(selected_search).attr('id')) +' '+ selected_item).attr('data-selected', false);
+            $(this).attr('data-selected', true).attr('data-ind', 0);
+            handleSelect('tbs');
+        });
+    });
+}
