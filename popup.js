@@ -83,6 +83,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     }
                     break;
+                case 46:
+                    handleDelete();
+                    break;
                 default:
                     $('#search').focus();
             }
@@ -105,6 +108,7 @@ function getTarget(item){
 }
 
 function applyThemeSettings(theme){
+    //run theme-specific actions
     switch(theme){
         case 'now':
             time = (new Date()).getHours();

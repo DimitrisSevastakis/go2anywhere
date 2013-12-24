@@ -5,6 +5,16 @@ function loadTabs(){
     $('#tbs').attr('data-search-selected', true);
 }
 
+function closeTab(){
+    var srchSelected = $(selected_search).attr('id');
+    var s = $('#'+getTarget(srchSelected)+' '+ selected_item);
+    id = s.attr('id');
+    next = (s.is(':first-child')) ? s.prev() : s.next();
+    next.attr('data-selected', true);
+    s.remove();
+    chrome.tabs.remove(parseInt(id));
+}
+
 function dumpTabs(query){
     $('#tbs').attr('data-last-search', query);
     $('#tabs > div').empty();
@@ -27,7 +37,7 @@ function dumpTabs(query){
             var span = $('<span>');
             anchor.html(title);
             span.append(anchor);
-            var li = $('<li class="selectable">').append(span);
+            var li = $('<li class="selectable" id="'+tabs[j].id+'">').append(span);
 
             li.append('<p class="urladdr">' + tabs[j].url +'</p>');
             li.attr('href', tabs[j].url);
@@ -35,11 +45,11 @@ function dumpTabs(query){
             
             // //select the first tab in the list
             $('#tabs '+ selected_item).attr('data-selected', false);
-            $('#tabs li:first').attr('data-selected', true).attr('data-ind', 0);
+            $('#tabs li:first').attr('data-selected', true);
         }
         $('#tabs .selectable').click(function(event){
             $('#'+ getTarget($(selected_search).attr('id')) +' '+ selected_item).attr('data-selected', false);
-            $(this).attr('data-selected', true).attr('data-ind', 0);
+            $(this).attr('data-selected', true);
             handleSelect('tbs');
         });
     });

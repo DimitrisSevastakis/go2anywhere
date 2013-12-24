@@ -13,7 +13,19 @@ function loadHistory(){
 function createHistoryAlarm(){
     chrome.alarms.clear('history_update');
     chrome.alarms.create('history_update',{when:Date.now()+500});
+}
 
+function deleteHistoryItem(){
+    var srchSelected = $(selected_search).attr('id');
+    var s = $('#'+getTarget(srchSelected) + ' ' + selected_item);
+    var url = $('#'+getTarget(srchSelected) + ' ' + selected_item +  ' .urladdr').text();
+    var d = confirm('Are you sure you want to delete the following url? \n \'' + url + '\'');
+    if(d){
+        next = (!s.is(':first-child')) ? s.prev() : s.next();
+        next.attr('data-selected', true);
+        s.remove();
+        chrome.history.deleteUrl({'url':url});
+    }
 }
 
 function dumpHistory(query, increment){
@@ -59,13 +71,12 @@ function dumpHistory(query, increment){
             
             // //select the first tab in the list
             $('#history '+ selected_item).attr('data-selected', false);
-            $('#history li:first').attr('data-selected', true).attr('data-ind', 0);
+            $('#history li:first').attr('data-selected', true);
         }
         $('#history .selectable').click(function(event){
             $('#'+ getTarget($(selected_search).attr('id')) +' '+ selected_item).attr('data-selected', false);
-            $(this).attr('data-selected', true).attr('data-ind', 0);
+            $(this).attr('data-selected', true);
             handleSelect('hstr');
         });
     });
-    
 }

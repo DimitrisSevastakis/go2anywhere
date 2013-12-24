@@ -27,6 +27,7 @@ function handleSelect(item){
                 if(tab.title == 'New Tab'){
                 //if it is the 'New Tab' page open the url in the current tab
                     chrome.tabs.update(tab.id, {url: s.attr('href')});
+                    window.close();
                 }else{
                 //else open new tab
                     chrome.tabs.create({url: s.attr('href')});
@@ -36,15 +37,29 @@ function handleSelect(item){
     });
 }
 
+function handleDelete(){
+    var srchSelected = $(selected_search).attr('id');
+    switch(srchSelected){
+        case 'bkmarks':
+            deleteBookmark();
+            break;
+        case 'hstr':
+            deleteHistoryItem();
+            break;
+        case 'tbs':
+            closeTab();
+            break;
+    }
+}
+
 function moveUp(item){
     //moves up the cursor by one item
     var target = getTarget(item);
     s = $('#' + target+ ' '+ selected_item);
-    if(parseInt(s.attr('data-ind'))>0){
+    if(!s.is(':first-child')){
         s.attr('data-selected', false);
-        next = $('#' + target+ ' li').eq(parseInt(s.attr('data-ind'))-1);
-        next.attr('data-selected', true).attr('data-ind', parseInt(s.attr('data-ind'))-1);
-        //if((s.offset().top)<$('#searchspace').offset().top+$('#searchspace').height()){
+        next = s.prev();
+        next.attr('data-selected', true)
         if((next.offset().top)-5<$('#searchspace').height() + $('#searchspace').offset().top || (next.offset().top+next.height())>$('body').height()){
             offset_top = next.offset().top - next.parent().offset().top + $('#'+target +' > div').scrollTop();
             $('#'+target +' > div').scrollTop(offset_top -5);   
@@ -56,10 +71,10 @@ function moveDown(item){
     //moves down the cursor by one item
     var target = getTarget(item);
     s = $('#' + target+ ' '+ selected_item);
-    if(parseInt(s.attr('data-ind'))<$('#' + target+ ' li').length-1){
+    if(!s.is(':last-child')){
         s.attr('data-selected', false);
-        next = $('#' + target+ ' li').eq(parseInt(s.attr('data-ind'))+1);
-        next.attr('data-selected', true).attr('data-ind', parseInt(s.attr('data-ind'))+1);
+        next = s.next();
+        next.attr('data-selected', true);
         if((next.offset().top+next.height())>$('body').height() || (next.offset().top)-5<$('#searchspace').height() + $('#searchspace').offset().top){
             offset_top = next.offset().top - next.parent().offset().top + $('#'+target +' > div').scrollTop();
             $('#'+target +' > div').scrollTop(offset_top + next.height() - $('#'+target +' > div').height() + 10 + parseInt(next.css("margin-bottom").replace('px','')));
