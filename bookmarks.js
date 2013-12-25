@@ -1,5 +1,6 @@
 var bookmarkList;
 var visit_count;
+var search_id=0;
 
 function loadBookmarks(){
     if($('#bkmarks').attr('data-last-search') != $('#search').val()) dumpBookmarks($('#search').val()); 
@@ -10,6 +11,9 @@ function loadBookmarks(){
 
 //add bookmarks to the bookmark section
 function dumpBookmarks(query) {
+    search_id++;
+    var current_search = search_id;
+    $('#bkmarks').attr('data-last-search', query);
     bookmarkList = new Array();
     visit_count = new Array();
     //get the bookmarks tree
@@ -31,6 +35,8 @@ function dumpBookmarks(query) {
             
             // get visit count for each bookmark
             chrome.history.getVisits({"url": txt[i]}, function (visits){
+                //to kill some of the asynchronous stuff that is going on
+                if(search_id!=current_search) return;
                 visit_count[visit_count.length] = visits.length;
 
                 //if we have all the visit counts do the following
@@ -48,6 +54,7 @@ function dumpBookmarks(query) {
                     $('#bookmarks > div').empty();
                     //append new list
                     for(j=0; j<bookmarkList.length; j++){
+                        if(search_id!=current_search) return;
                         $('#bookmarks > div').append(list[j].item);
                     }
 
@@ -66,7 +73,6 @@ function dumpBookmarks(query) {
             });
         }
     });
-    $('#bkmarks').attr('data-last-search', query);
 }
 
 // Traverse the bookmark tree, and print the folder and nodes.
