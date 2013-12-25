@@ -1,3 +1,6 @@
+var bookmarkList;
+var visit_count;
+
 function loadBookmarks(){
     if($('#bkmarks').attr('data-last-search') != $('#search').val()) dumpBookmarks($('#search').val()); 
     $('#results').animate({left: "-600px"}, 250);
@@ -7,17 +10,61 @@ function loadBookmarks(){
 
 //add bookmarks to the bookmark section
 function dumpBookmarks(query) {
-    $('#bookmarks > div').empty();
+    bookmarkList = new Array();
+    visit_count = new Array();
     //get the bookmarks tree
     chrome.bookmarks.getTree(function(bookmarkTreeNodes) {
         //parse tree and add leaves to the list
-       dumpTreeNodes(bookmarkTreeNodes, query, '/');
-       if($('#bookmarks li').length == 0) $('#bookmarks > div').append(emptyList);
-       $('#bookmarks .selectable').click(function(event){
-            $('#'+ getTarget($(selected_search).attr('id')) +' '+ selected_item).attr('data-selected', false);
-            $(this).attr('data-selected', true);
-            handleSelect('bkmarks');
-        });
+        dumpTreeNodes(bookmarkTreeNodes, query, '/');
+                
+        //if there are no bookmarks
+        if(bookmarkList.length==0){
+            $('#bookmarks > div').empty();
+            $('#bookmarks > div').append(emptyList);
+            return;
+        }
+        //txt will contain all the urls of the bookmarks
+        var txt = new Array();
+        for(var i=0;i<bookmarkList.length;i++){
+            txt[i] = bookmarkList[i].children('.urladdr').text();
+            txt[i] = txt[i].substring(0,txt[i].indexOf('('));
+            
+            // get visit count for each bookmark
+            chrome.history.getVisits({"url": txt[i]}, function (visits){
+                visit_count[visit_count.length] = visits.length;
+
+                //if we have all the visit counts do the following
+                if(visit_count.length == bookmarkList.length){
+                    var list = [];
+                    for(j=0; j<bookmarkList.length; j++){
+                        list.push({'item': bookmarkList[j], 'visit_count': visit_count[j]});
+                    }
+                    //sort bookmarks by most visited
+                    list.sort(function(a, b) {
+                        return ((a.visit_count > b.visit_count) ? -1 : ((a.visit_count == b.visit_count) ? 0 : 1));
+                    });
+
+                    //empty old list
+                    $('#bookmarks > div').empty();
+                    //append new list
+                    for(j=0; j<bookmarkList.length; j++){
+                        $('#bookmarks > div').append(list[j].item);
+                    }
+
+                    //add click listener
+                    $('#bookmarks .selectable').click(function(event){
+                        $('#'+ getTarget($(selected_search).attr('id')) +' '+ selected_item).attr('data-selected', false);
+                        $(this).attr('data-selected', true);
+                        handleSelect('bkmarks');
+                    });
+
+                    //select the first bookmark in the list
+                    $('#bookmarks '+ selected_item).attr('data-selected', false);
+                    $('#bookmarks li:first').attr('data-selected', true);
+
+                }
+            });
+        }
     });
     $('#bkmarks').attr('data-last-search', query);
 }
@@ -58,11 +105,10 @@ function dumpNode(bookmarkNode, query, parent) {
         li.attr('href', bookmarkNode.url);
     }
 
-    if(!bookmarkNode.children) $('#bookmarks > div').append(li);
-    
-    //select the first bookmark in the list
-    $('#bookmarks '+ selected_item).attr('data-selected', false);
-    $('#bookmarks li:first').attr('data-selected', true);
+    if(!bookmarkNode.children){
+        bookmarkList[bookmarkList.length] = li;
+        // $('#bookmarks > div').append(li);
+    }
 }
 
 function deleteBookmark(){
