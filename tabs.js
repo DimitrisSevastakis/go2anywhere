@@ -1,5 +1,3 @@
-var tabList;
-
 function loadTabs(){
     if($('#tbs').attr('data-last-search') != $('#search').val() || $('#tabs li').length==0) dumpTabs($('#search').val());
     $('#results').animate({left: "0px"}, 250);
@@ -18,13 +16,9 @@ function closeTab(){
 }
 
 function dumpTabs(query){
-    tabList = new Array();
+    var tabList = new Array();
     $('#tbs').attr('data-last-search', query);
     chrome.tabs.query({},function(tabs){
-        if(tabs.length == 0){
-            $('#tabs > div').append(emptyList);
-            return;
-        }
         var j;
         //go through all the open tabs
         for(j=0; j<tabs.length; j++){
@@ -46,11 +40,18 @@ function dumpTabs(query){
             //add item to list
             tabList[j] = li;
         }
+
         //empty old list
         $('#tabs > div').empty();
+        //if not tabs match the search append message
+        if(tabList.length == 0){
+            $('#tabs > div').append(emptyList);
+            return;
+        }
         //append new list
         $('#tabs > div').append(tabList);
 
+        //bind click action
         $('#tabs .selectable').click(function(event){
             $('#'+ getTarget($(selected_search).attr('id')) +' '+ selected_item).attr('data-selected', false);
             $(this).attr('data-selected', true);
