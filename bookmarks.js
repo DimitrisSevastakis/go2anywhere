@@ -50,13 +50,16 @@ function dumpBookmarks(query) {
                         return ((a.visit_count > b.visit_count) ? -1 : ((a.visit_count == b.visit_count) ? 0 : 1));
                     });
 
+                    //extract html elements from list
+                    var templ = new Array();
+                    for(j=0; j<bookmarkList.length; j++){
+                        templ[j] = list[j].item;
+                    }
+
                     //empty old list
                     $('#bookmarks > div').empty();
-                    //append new list
-                    for(j=0; j<bookmarkList.length; j++){
-                        if(search_id!=current_search) return;
-                        $('#bookmarks > div').append(list[j].item);
-                    }
+                    if(search_id!=current_search) return;
+                    $('#bookmarks > div').append(templ);
 
                     //add click listener
                     $('#bookmarks .selectable').click(function(event){

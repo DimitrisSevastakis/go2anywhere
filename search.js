@@ -28,19 +28,28 @@ function srch(item, query, parent){
             predicate = String(item.url.toLowerCase()).indexOf(q.toLowerCase()) == -1;
             return predicate;
         }
-        //else search this element's title for fuzzy match and url for exact match
+        //if '>' and in bookmarks, search elements with folder path that matches the query
         if($(selected_search).attr('id')=='bkmarks' && query.indexOf('>')==0){
-            q = query.substring(1);
+            //if '|' exists, it marks the end of the bookmark path search string else the whole string it the query 
+            var end = (query.indexOf('|')==-1) ? query.length : query.indexOf('|');
+            q = query.substring(1, end);
             var queries = q.split(' ');
             for(var i=0; i<queries.length; i++){
                 if(parent.toLowerCase().indexOf(queries[i].toLowerCase())==-1) return true;
             }
-          return predicate;  
+
+            if(query.indexOf('|')==-1) return predicate;  
+
+            //if '|' character exists, do normal search on what follows
+            queries = query.substring(query.indexOf('|')+1).split(' ');
+            for(var i=0; i<queries.length; i++){
+                if(srch(item, queries[i], parent)) return true;
+            }
+
+            return false;
         }
 
-        // ind = isMatch(String(item.title.toLowerCase()), query.toLowerCase());
-        // predicate = (ind==-1 && String(item.url.toLowerCase()).indexOf(query.toLowerCase()) == -1);   
-
+        //else search this element's title for match and url for exact match
         var queries = query.split(' ');
 
         for(i=0; i<queries.length; i++){

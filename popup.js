@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
         applyThemeSettings(theme);
     } 
     else{
-        $('head').append('<link rel="stylesheet" type="text/css" href="css/default.css">');
+        $('head').append('<link rel="stylesheet" type="text/css" href="css/now.css">');
     }
     //get bookmarks
     dumpBookmarks();
@@ -55,10 +55,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     break;
                 case 38:
                     //case up-arrow select previous bookmark
+                    event.preventDefault();
                     moveUp(searchIn);
                     break;
                 case 40:
                     //case up-arrow select previous bookmark
+                    event.preventDefault();
                     moveDown(searchIn);
                     break;
                 case 37:

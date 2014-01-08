@@ -16,6 +16,11 @@
     "chrome://favicon/"
   ],
 
+  // "background": {
+  //   "scripts": ["eventPage.js"],
+  //   "persistent": false
+  // },
+
   "options_page": "options.html",
 
   "browser_action": {
