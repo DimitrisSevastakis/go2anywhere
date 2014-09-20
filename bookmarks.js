@@ -29,6 +29,7 @@ function dumpBookmarks(query) {
         }
         //txt will contain all the urls of the bookmarks
         var txt = new Array();
+        var htmltoreturn = $('<div id="tempholder"></div>');
         for(var i=0;i<bookmarkList.length;i++){
             txt[i] = bookmarkList[i].children('.urladdr').text();
             txt[i] = txt[i].substring(0,txt[i].indexOf('('));
@@ -60,6 +61,7 @@ function dumpBookmarks(query) {
                     $('#bookmarks > div').empty();
                     if(search_id!=current_search) return;
                     $('#bookmarks > div').append(templ);
+                    // divtoreturn.append(templ);
 
                     //add click listener
                     $('#bookmarks .selectable').click(function(event){

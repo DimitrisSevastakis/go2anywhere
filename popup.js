@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } 
     else{
         $('head').append('<link rel="stylesheet" type="text/css" href="css/now.css">');
+        applyThemeSettings('now');
     }
     //get bookmarks
     dumpBookmarks();
@@ -111,8 +112,10 @@ function getTarget(item){
 
 function applyThemeSettings(theme){
     //run theme-specific actions
+    console.log(theme);
     switch(theme){
         case 'now':
+            console.log('i run');
             time = (new Date()).getHours();
             if(time <6 || time > 20){
                 $('#searchspace').css({"background-image" : "url(../images/googlenow2.jpg)"});

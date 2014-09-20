@@ -13,13 +13,9 @@
     "bookmarks",
     "history",
     "alarms",
-    "chrome://favicon/"
+    "chrome://favicon/",
+    "<all_urls>"
   ],
-
-  // "background": {
-  //   "scripts": ["eventPage.js"],
-  //   "persistent": false
-  // },
 
   "options_page": "options.html",
 

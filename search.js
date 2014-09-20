@@ -1,3 +1,5 @@
+// var settings = chrome.extension.getBackgroundPage().settings;
+
 //fuzzy search function
 function isMatch(str, q){
     var i;
@@ -48,6 +50,25 @@ function srch(item, query, parent){
 
             return false;
         }
+        // if($(selected_search).attr('id')=='tbs' && query=='--'){
+        //     var items_to_display=settings.numItems;
+        //     items_to_display=1000;
+
+        //     nowtime = new Date();
+        //     currentTime = nowtime.getTime(); 
+
+        //     var min_limit = localStorage["minimumTabInc"];
+
+        //     for (j = 0, i = localStorage["uniqueTabInc"] - 1; i>=0 && j<pageNo*items_to_display; i--) if (localStorage["ClosedTab-"+i]) j++;
+
+        //     for (j = 0; i>=min_limit && j<items_to_display; i--){
+        //         var closedTab = localStorage["ClosedTab-"+i];
+        //         if (closedTab){
+        //             console.log(closedTab);
+        //             j++;
+        //         }
+        //     }
+        // }
 
         //else search this element's title for match and url for exact match
         var queries = query.split(' ');

@@ -31,6 +31,7 @@ function handleSelect(item){
                 }else{
                 //else open new tab
                     chrome.tabs.create({url: s.attr('href')});
+                    window.close();
                 }
             });
         }

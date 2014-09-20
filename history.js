@@ -32,7 +32,7 @@ function dumpHistory(query, increment){
     $('#hstr').attr('data-last-search', query);
     if(increment!=parseInt($('#hstr').attr('data-search-increment'))) return;
     $('#history > div').empty();
-    chrome.history.search({'text': query, 'maxResults': 50},function(history){
+    chrome.history.search({'text': query},function(history){
         if(increment!=parseInt($('#hstr').attr('data-search-increment'))) return;
         if(history.length == 0){
             $('#history > div').append(emptyList);
