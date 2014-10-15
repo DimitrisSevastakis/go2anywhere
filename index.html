@@ -1,69 +1,79 @@
 <!DOCTYPE html>
 <html>
+
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <title>Go2Anywhere by diwora</title>
+    <meta name="description" content="Go2Anywhere : This extension for chrome allows you to search through your bookmarks, open tabs and history in a similar way to Sublime Text">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Go2Anywhere</title>
   </head>
 
   <body>
-    <div id="container">
-      <div class="inner">
 
-        <header>
-          <h1>Go2Anywhere</h1>
-          <h2>This extension for chrome allows you to search through your bookmarks, open tabs and history in a similar way to Sublime Text</h2>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/diwora/go2anywhere">View on GitHub</a>
+
+          <h1 id="project_title">Go2Anywhere</h1>
+          <h2 id="project_tagline">This extension for chrome allows you to search through your bookmarks, open tabs and history in a similar way to Sublime Text</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/diwora/go2anywhere/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/diwora/go2anywhere/tarball/master">Download this project as a tar.gz file</a>
+            </section>
         </header>
+    </div>
 
-        <section id="downloads" class="clearfix">
-          <a href="https://github.com/diwora/go2anywhere/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
-          <a href="https://github.com/diwora/go2anywhere/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
-          <a href="https://github.com/diwora/go2anywhere" id="view-on-github" class="button"><span>View on GitHub</span></a>
-        </section>
-
-        <hr>
-
-        <section id="main_content">
-          <h1>
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
 <a name="go2anywhere" class="anchor" href="#go2anywhere"><span class="octicon octicon-link"></span></a>Go2Anywhere</h1>
 
 <p><img src="https://drive.google.com/uc?export=download&amp;id=0ByZ2MyLIVr0fR28tRkpSLWoyNk0">
 Welcome to the go2anywhere wiki!</p>
 
-<p>Go2Anywhere is a chrome extension. It allows you to quickly search through your bookmarks, open tabs or history.</p>
+<p>This extension for chrome allows you to search through your bookmarks in a similar way to Sublime Text</p>
 
-<p>To get quicker access to the plugin add a shortcut from the extensions settings page!</p>
+<p>By default, it searches through your bookmarks, tabs or history looking for a match on the title of the bookmark and exact match on the url of the bookmark.</p>
 
-<p>To navigate between the three search sections you can use the Ctrl+ left/righ arrow keys. Additionally using just the up/down keys (without Ctrl) will select the previous or next item in the list.</p>
+<p>Switch quickly between the tabs/bookmarks/history sections using ctrl+arrow keys.</p>
 
-<p>There are four modes of search*. 
-Default: Searches for exact match on title and exact match on url
-@: Adding the '@' symbol before the query, it will return only items with exact match on the title, ignoring the url.</p>
+<p>To get quicker access to the extension assign a keyboard shortcut to it from the extensions settings page ("ctrl + p" for sublime fans) .</p>
 
-<h1>
-<a name="-adding-the--symbol-before-the-query-it-will-return-only-items-with-exact-match-on-the-url-ignoring-the-title" class="anchor" href="#-adding-the--symbol-before-the-query-it-will-return-only-items-with-exact-match-on-the-url-ignoring-the-title"><span class="octicon octicon-link"></span></a>: Adding the '#' symbol before the query, it will return only items with exact match on the url, ignoring the title.</h1>
+<p>Searching with the '@' symbol before your query it searches only for exact match on the title. Searching with the '#' symbol before your query it searches only for exact match on the url. Searching with the '&gt;' symbol before your query it will search only for bookmarks that are under a folder that match the query (very useful).</p>
 
-<blockquote>
-<p>: Adding the '&gt;' symbol before the query, it will return only bookmark items that are in a folder path that contains the query string, ignoring url and title.</p>
-</blockquote>
+<p>'Enter' opens the selected bookbark in a new tab and switching focus to that new tab. 'Shift + Enter' opens the selected bookmark in a new tab while maintaining the focus on the current tab. 'ctrl + a' Opens all search results in new tabs on the current window. 'Ctrl + Shift + a' Opens all search results in new tabs on a new window.</p>
 
-<p>*The first three mode are applicable to the 'tabs' and 'bookmarks' search while the last one is applicable only on 'bookmarks' search. The history search uses the build in chrome function for searching history.</p>
-        </section>
+<p>You can combine the last type of search in the following way: Lets say you have a bookmark folder named "shopping" where you save all your shopping related stuff, and within that folder you have another folder named "cart"</p>
 
-        <footer>
-          Go2Anywhere is maintained by <a href="https://github.com/diwora">diwora</a><br>
-          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
-        </footer>
+<p>'&gt;shopping/cart | headphones' 
+'&gt;shopping cart | headphones'</p>
 
-        
-      </div>
+<p>The two examples above are (almost) equivalent.They both return the bookmarks that are under the folder shopping/cart and has the word headphones in the title or url. In the case of the second example, the folder does not have to be a direct child of shopping, rather both of the words have to exist in the bookmark path.</p>
+
+<p>Similarly :</p>
+
+<p>'&gt;shopping/cart | <a href="https://github.com/headphones" class="user-mention">@headphones</a>' 
+'&gt;shopping/cart | #ebay.com'</p>
+
+<p>You can use the symbols mentioned above to do a search within a bookmark folder using just the title or just the url.</p>
+      </section>
     </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Go2Anywhere maintained by <a href="https://github.com/diwora">diwora</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
   </body>
 </html>
