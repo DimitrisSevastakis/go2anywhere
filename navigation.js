@@ -1,5 +1,5 @@
 //handles a selection, where it is done by mouse click or 'enter' button
-function handleSelect(item){
+function handleSelect(item, focus){
     //get all open tabs
     chrome.tabs.query({},function(tabs){
         var s = $('#'+getTarget(item)+' '+ selected_item);
@@ -27,15 +27,55 @@ function handleSelect(item){
                 if(tab.title == 'New Tab'){
                 //if it is the 'New Tab' page open the url in the current tab
                     chrome.tabs.update(tab.id, {url: s.attr('href')});
-                    window.close();
                 }else{
                 //else open new tab
-                    chrome.tabs.create({url: s.attr('href')});
+                    if(focus){
+                        chrome.tabs.create({active:false,url: s.attr('href')});
+                    }
+                    else{
+                        chrome.tabs.create({url: s.attr('href')});
+                    }
+                }
+                if(!focus){
                     window.close();
                 }
             });
         }
     });
+}
+
+function openAll(section, newWindow){
+    //get all the children of the scrollable (should be list items)
+    items = $("#"+getTarget(section)+" .scrollable").children();
+    var n = 0;
+    console.log(newWindow);
+    if (newWindow){
+        console.log("creating new window");
+        first = items[0];
+        items.splice(0,1);
+        chrome.windows.create({url: $(first).attr('href')}, function(win){
+            for (i = 0; i < items.length; i++){
+                openInNewTab(items[i], win.id);
+            }
+        });
+    }else{
+        // loop though them all and open each link in a new tab
+        for (i = 0; i < items.length; i++){
+            openInNewTab(items[i], n);
+        }
+    }
+
+}
+
+function openInNewTab(item, winId){
+    rl = $(item).attr('href');
+    // chrome.windows.create();
+    if (winId == 0){
+        chrome.tabs.create({active:false,url: rl});
+    }
+    else{
+        chrome.tabs.create({active:false, windowId: winId, url: rl});
+    }
 }
 
 function handleDelete(){

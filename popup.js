@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
     chrome.alarms.onAlarm.addListener(loadHistory);
 
     $(function() {
-        //on every key input check if 'enter' 'arrow-up' or 'arrow-down'
+        //on every key input check if 'enter' 'delete' 'arrow-up' or 'arrow-down'
         $('.res').click(function(event){
             switch(event.target.id){
                 case 'tbs':
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
             switch(event.which){
                 case 13:
                     //case enter open selected bookmark
-                    handleSelect(searchIn);
+                    handleSelect(searchIn, event.shiftKey);
                     break;
                 case 38:
                     //case up-arrow select previous bookmark
@@ -88,6 +88,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     break;
                 case 46:
                     handleDelete();
+                    break;
+                case 65:
+                    // open all bookbarks
+                    if(event.ctrlKey && (searchIn.indexOf("bkmarks")==0 || searchIn.indexOf("hstr")==0) ){
+                        openAll(searchIn, event.shiftKey);
+                    }
                     break;
                 default:
                     $('#search').focus();

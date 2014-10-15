@@ -67,7 +67,7 @@ function dumpBookmarks(query) {
                     $('#bookmarks .selectable').click(function(event){
                         $('#'+ getTarget($(selected_search).attr('id')) +' '+ selected_item).attr('data-selected', false);
                         $(this).attr('data-selected', true);
-                        handleSelect('bkmarks');
+                        handleSelect('bkmarks', 0);
                     });
 
                     //select the first bookmark in the list

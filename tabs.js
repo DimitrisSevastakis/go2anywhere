@@ -55,7 +55,7 @@ function dumpTabs(query){
         $('#tabs .selectable').click(function(event){
             $('#'+ getTarget($(selected_search).attr('id')) +' '+ selected_item).attr('data-selected', false);
             $(this).attr('data-selected', true);
-            handleSelect('tbs');
+            handleSelect('tbs', 0);
         });
         //select the first tab in the list
         $('#tabs '+ selected_item).attr('data-selected', false);

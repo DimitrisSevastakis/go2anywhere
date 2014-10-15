@@ -76,7 +76,7 @@ function dumpHistory(query, increment){
         $('#history .selectable').click(function(event){
             $('#'+ getTarget($(selected_search).attr('id')) +' '+ selected_item).attr('data-selected', false);
             $(this).attr('data-selected', true);
-            handleSelect('hstr');
+            handleSelect('hstr', 0);
         });
     });
 }
