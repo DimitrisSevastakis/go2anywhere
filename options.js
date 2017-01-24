@@ -1,8 +1,11 @@
 // Saves options to localStorage.
 function save_options() {
   var select = document.getElementById("theme");
+  var selectTab = document.getElementById("tab");
   var theme = select.children[select.selectedIndex].value;
+  var defTab = selectTab.children[selectTab.selectedIndex].value;
   localStorage["selected_theme"] = theme;
+  localStorage["selected_tab"] = defTab;
 
   // Update status to let user know options were saved.
   var status = document.getElementById("status");
@@ -23,6 +26,18 @@ function restore_options() {
     var child = select.children[i];
     if (child.value == selected) {
       child.selected = "true";
+      break;
+    }
+  }
+  var selectedTab = localStorage["selected_tab"];
+  if(!selectedTab){
+    return;
+  }
+  var selectTab = document.getElementById("tab");
+  for (var i = 0; i < selectTab.children.length; i++) {
+    var child = selectTab.children[i];
+    if (child.value == selectedTab) {
+      child.selectedTab = "true";
       break;
     }
   }

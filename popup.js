@@ -5,7 +5,7 @@ var selected_item = 'li[data-selected=true]';
 
 //when the extension window is loaded do:
 document.addEventListener('DOMContentLoaded', function () { 
-    theme = localStorage["selected_theme"];
+    var theme = localStorage["selected_theme"];
     if(theme){
         $('head').append('<link rel="stylesheet" type="text/css" href="css/'+theme+'.css">');
         applyThemeSettings(theme);
@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
         $('head').append('<link rel="stylesheet" type="text/css" href="css/now.css">');
         applyThemeSettings('now');
     }
+
     //get bookmarks
     dumpBookmarks();
     $('#hstr').attr('data-search-increment', 0);
@@ -100,6 +101,16 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    var start_tab = localStorage["selected_tab"];
+    console.log(start_tab);
+    if(start_tab == "open-tabs"){
+        loadTabs();
+    }
+    else if(start_tab == "history"){
+        loadHistory();
+    }
+
     $("#search").focus();
 });
 
