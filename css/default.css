@@ -1,6 +1,7 @@
 body {
     width: 600px;
     height: 450px;
+    overflow: hidden;
     background-color: #293134;
 }
 

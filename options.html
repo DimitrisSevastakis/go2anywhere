@@ -3,15 +3,16 @@
 
 <body>
 
-Select Theme:
+<p>Select Theme:</p>
 <select id="theme">
  <option value="default">Default</option>
  <option value="now">Google</option>
+ <option value="fullscreen">Fullscreen</option>
 </select>
 
 <br>
 
-Select Starting Tab:
+<p>Select Starting Tab:</p>
 <select id="tab">
  <option value="open-tabs">Open Tabs</option>
  <option value="bookmarks">Bookmarks</option>
@@ -19,8 +20,18 @@ Select Starting Tab:
 </select>
 
 <br>
+
+<p>View Style</p>
+<select id="view">
+ <option value="Popup">Popup</option>
+ <option value="Embedded">Embedded</option>
+</select>
+
+<br>
 <div id="status"></div>
+<p>
 <button id="save">Save</button>
+</p>
 </body>
 
 <script src="options.js"></script>

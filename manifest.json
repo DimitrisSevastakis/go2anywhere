@@ -13,11 +13,24 @@
     "bookmarks",
     "history",
     "alarms",
+    "storage",
     "chrome://favicon/",
     "<all_urls>"
   ],
 
   "options_page": "options.html",
+
+  "content_scripts": [
+    {
+      "all_frames": false,
+      "matches": ["<all_urls>"],
+      "js": ["embedded.js"]
+    }
+  ],
+
+  "web_accessible_resources": [
+      "ipopup.html", "jquery-1.10.2.js", "bookmarks.js", "tabs.js", "history.js", "search.js", "navigation.js", "popup.js", "ipopup.js"
+  ],
 
   "browser_action": {
     "default_icon": "images/icon16.png",

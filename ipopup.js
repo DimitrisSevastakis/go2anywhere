@@ -2,28 +2,12 @@ var timeouts = {};
 var emptyList = '<center><li>No Item Found</li></center>';
 var selected_search = '[data-search-selected=true]';
 var selected_item = 'li[data-selected=true]';
-var selected_style = "";
 
-//when the extension window is loaded do:
-// document.addEventListener('DOMContentLoaded', onInit, true); 
-// function onInit(){
-chrome.storage.local.get(['go2anywhere/selected_style'], function(selected) {
-    selected_style = selected['go2anywhere/selected_style'];
-    chrome.tabs.getSelected(null, function(tab){
-        if (selected_style && selected_style == "Embedded" && tab.url != "chrome://newtab/"
-            && tab.url != "chrome://extensions/" && tab.url != "chrome://settings/"){
-            chrome.tabs.sendMessage(tab.id, {toggleGo2Anywhere: "true"}, function(response) {
-                window.close();
-            });
-        }
-    })
-});
+var selected_style = "";
 
 chrome.storage.local.get(['go2anywhere/selected_theme'], function(selected) {
     var theme = selected['go2anywhere/selected_theme'];
     if(theme){
-        if (selected!="Embedded" && theme =="fullscreen")
-            theme = "now";
         $('head').append('<link rel="stylesheet" type="text/css" href="css/'+theme+'.css">');
         applyThemeSettings(theme);
     } 
@@ -33,7 +17,6 @@ chrome.storage.local.get(['go2anywhere/selected_theme'], function(selected) {
     }
 });
 
-
 //get bookmarks
 dumpBookmarks();
 $('#hstr').attr('data-search-increment', 0);
@@ -41,6 +24,7 @@ $('#hstr').attr('data-search-increment', 0);
 $('#filters td').attr('data-search-selected', false);
 $('#bkmarks').attr('data-search-selected', true);
 $('.res').attr('data-last-search', '');
+
 chrome.alarms.onAlarm.addListener(loadHistory);
 
 $(function() {
@@ -64,6 +48,7 @@ $(function() {
         searchIn = String($(selected_search).attr('id'));
         if(searchIn == 'bkmarks') loadBookmarks();
         else if(searchIn == 'tbs') loadTabs();
+        // else if(searchIn == 'hstr') createHistoryAlarm();
         else if(searchIn == 'hstr') loadHistory();
     });
 
@@ -72,6 +57,9 @@ $(function() {
         switch(event.which){
             case 13:
                 //case enter open selected bookmark
+                chrome.tabs.getSelected(null, function(tab){
+                    chrome.tabs.sendMessage(tab.id, {toggleGo2Anywhere: "true"}, function(response) {});
+                });
                 handleSelect(searchIn, event.shiftKey);
                 break;
             case 38:
@@ -131,6 +119,7 @@ chrome.storage.local.get(['go2anywhere/selected_tab'], function(selected) {
     }
 });
 
+// $("#search").focus();
 // }
 
 function getTarget(item){
@@ -160,4 +149,9 @@ function applyThemeSettings(theme){
     }
 }
 
-$("#search").focus();
+function setFocusSearchBox() {
+    var iframe = $("#search")[0];
+    $(iframe).focus();
+}
+
+setTimeout(setFocusSearchBox, 100);

@@ -1,0 +1,34 @@
+<head>
+  <script type="text/javascript" src="jquery-1.10.2.js"></script>
+  <script type="text/javascript" src="bookmarks.js"></script>
+  <script type="text/javascript" src="tabs.js"></script>
+  <script type="text/javascript" src="history.js"></script>
+  <script type="text/javascript" src="search.js"></script>
+  <script type="text/javascript" src="navigation.js"></script>
+  <script type="text/javascript" src="ipopup.js"></script>
+</head>
+<body>
+  <div id="searchspace">
+    <div id="tf">
+      <input type="text" id="search">
+      <center id="filter_table_container">
+          <table id="filters">
+            <tr>
+              <td id="tbs" class="res">Tabs</td>
+              <td id="bkmarks" class="res">Bookmarks</td>
+              <td id="hstr" class="res">History</td>
+            </tr>
+          </table>
+        </center>
+    </div>
+  </div>
+  <div id="results">
+    <table>
+      <tr>
+        <td><ul id="tabs"><div class="scrollable"></div></ul></td>
+        <td><ul id="bookmarks"><div class="scrollable"></div></ul></td>
+        <td><ul id="history"><div class="scrollable"></div></ul></td>
+      </tr>
+    </table>
+  </div>
+</body>

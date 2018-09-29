@@ -4,7 +4,7 @@ var search_id=0;
 
 function loadBookmarks(){
     if($('#bkmarks').attr('data-last-search') != $('#search').val()) dumpBookmarks($('#search').val()); 
-    $('#results').animate({left: "-600px"}, 250);
+    $('#results').animate({left: "-100%"}, 250);
     $('.res').attr('data-search-selected', false);
     $('#bkmarks').attr('data-search-selected', true);
 }

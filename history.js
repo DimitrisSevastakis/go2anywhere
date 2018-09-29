@@ -5,7 +5,7 @@ function loadHistory(){
     var q = $('#search').val();
 
     if(String($('#hstr').attr('data-last-search')) !== q || $('#history li').length==0) dumpHistory(q,increment);
-    $('#results').animate({left: "-1200px"}, 250);
+    $('#results').animate({left: "-200%"}, 250);
     $('.res').attr('data-search-selected', false);
     $('#hstr').attr('data-search-selected', true);
 }
@@ -33,6 +33,7 @@ function dumpHistory(query, increment){
     if(increment!=parseInt($('#hstr').attr('data-search-increment'))) return;
     $('#history > div').empty();
     chrome.history.search({'text': query},function(history){
+        console.log(history);
         if(increment!=parseInt($('#hstr').attr('data-search-increment'))) return;
         if(history.length == 0){
             $('#history > div').append(emptyList);
