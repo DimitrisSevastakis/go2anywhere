@@ -34,6 +34,10 @@ body {
     margin-right: 0px;
 }
 
+img.preview{
+    width: 100%;
+}
+
 #filter_table_container{
     margin-top: 10px;
 }
@@ -128,6 +132,9 @@ div.selectable{
     background:white;
     margin: 8px 12px 8px 0px;
     border-radius:3px;
+    width: 350px;
+    height: 305px;
+    float:left;
 }
 
 div[data-selected=true], #filters td[data-search-selected=true]{

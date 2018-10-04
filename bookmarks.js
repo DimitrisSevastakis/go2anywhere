@@ -23,8 +23,8 @@ function dumpBookmarks(query) {
                 
         //if there are no bookmarks
         if(bookmarkList.length==0){
-            $('#bookmarks > div').empty();
-            $('#bookmarks > div').append(emptyList);
+            $('#bookmarks').empty();
+            $('#bookmarks').append(emptyList);
             return;
         }
         //txt will contain all the urls of the bookmarks
@@ -58,9 +58,9 @@ function dumpBookmarks(query) {
                     }
 
                     //empty old list
-                    $('#bookmarks > div').empty();
+                    $('#bookmarks').empty();
                     if(search_id!=current_search) return;
-                    $('#bookmarks > div').append(templ);
+                    $('#bookmarks').append(templ);
                     // divtoreturn.append(templ);
 
                     //add click listener
@@ -72,7 +72,7 @@ function dumpBookmarks(query) {
 
                     //select the first bookmark in the list
                     $('#bookmarks '+ selected_item).attr('data-selected', false);
-                    $('#bookmarks li:first').attr('data-selected', true);
+                    $('#bookmarks div:first').attr('data-selected', true);
 
                 }
             });
@@ -104,7 +104,7 @@ function dumpNode(bookmarkNode, query, parent) {
     anchor.html(temp);
     span.append(anchor);
 
-    var li = $('<li class="selectable" id="'+bookmarkNode.id+'">');
+    var li = $('<div class="selectable" id="'+bookmarkNode.id+'">');
     // li.append('<div class="imgholder"><img class="bmtn" src="chrome://favicon/'+bookmarkNode.url+'"/></div>');
     li.append(span);
     if (bookmarkNode.children && bookmarkNode.children.length > 0) {
@@ -114,6 +114,10 @@ function dumpNode(bookmarkNode, query, parent) {
     li.append('<p class="urladdr">'+bookmarkNode.url +'<span class="bookmark_path">('+parent +')</span></p>');
     if(!bookmarkNode.children) {
         li.attr('href', bookmarkNode.url);
+    }
+
+    if(selected_theme == "previews"){
+        li.append('<p class="preview"/>');
     }
 
     if(!bookmarkNode.children){

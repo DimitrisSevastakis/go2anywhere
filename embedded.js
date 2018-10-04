@@ -23,7 +23,7 @@ function messageHandler(request, sender, sendResponse){
 				var w = "600px";
 				var h = "450px";
 				var ot = "10%";
-				if(theme == 'fullscreen'){
+				if(theme == 'fullscreen' || theme == 'previews'){
 					w = "100%";
 					h = "100%";
 					ot = "0px";

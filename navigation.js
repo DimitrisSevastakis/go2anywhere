@@ -102,8 +102,8 @@ function moveUp(item){
         next = s.prev();
         next.attr('data-selected', true)
         if((next.offset().top)-5<$('#searchspace').height() + $('#searchspace').offset().top || (next.offset().top+next.height())>$('body').height()){
-            offset_top = next.offset().top - next.parent().offset().top + $('#'+target +' > div').scrollTop();
-            $('#'+target +' > div').scrollTop(offset_top -5);   
+            offset_top = next.offset().top - next.parent().offset().top + $('#'+target).scrollTop();
+            $('#'+target).scrollTop(offset_top -5);   
         } 
     }
 }
@@ -117,8 +117,8 @@ function moveDown(item){
         next = s.next();
         next.attr('data-selected', true);
         if((next.offset().top+next.height())>$('body').height() || (next.offset().top)-5<$('#searchspace').height() + $('#searchspace').offset().top){
-            offset_top = next.offset().top - next.parent().offset().top + $('#'+target +' > div').scrollTop();
-            $('#'+target +' > div').scrollTop(offset_top + next.height() - $('#'+target +' > div').height() + 10 + parseInt(next.css("margin-bottom").replace('px','')));
+            offset_top = next.offset().top - next.parent().offset().top + $('#'+target).scrollTop();
+            $('#'+target).scrollTop(offset_top + next.height() - $('#'+target).height() + 10 + parseInt(next.css("margin-bottom").replace('px','')));
         } 
     }
 }

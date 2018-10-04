@@ -1,9 +1,10 @@
 var timeouts = {};
-var emptyList = '<center><li>No Item Found</li></center>';
+var emptyList = '<center><div class="selectable">No Item Found</div></center>';
 var selected_search = '[data-search-selected=true]';
-var selected_item = 'li[data-selected=true]';
+var selected_item = 'div[data-selected=true]';
 
 var selected_style = "";
+var selected_theme = "";
 
 chrome.storage.local.get(['go2anywhere/selected_theme'], function(selected) {
     var theme = selected['go2anywhere/selected_theme'];

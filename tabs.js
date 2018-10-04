@@ -33,23 +33,23 @@ function dumpTabs(query){
             var span = $('<span>');
             anchor.html(title);
             span.append(anchor);
-            var li = $('<li class="selectable" id="'+tabs[j].id+'">').append(span);
+            var div = $('<div class="selectable" id="'+tabs[j].id+'">').append(span);
 
-            li.append('<p class="urladdr">' + tabs[j].url +'</p>');
-            li.attr('href', tabs[j].url);
+            div.append('<p class="urladdr">' + tabs[j].url +'</p>');
+            div.attr('href', tabs[j].url);
             //add item to list
-            tabList[j] = li;
+            tabList[j] = div;
         }
 
         //empty old list
-        $('#tabs > div').empty();
+        $('#tabs').empty();
         //if not tabs match the search append message
         if(tabList.length == 0){
-            $('#tabs > div').append(emptyList);
+            $('#tabs').append(emptyList);
             return;
         }
         //append new list
-        $('#tabs > div').append(tabList);
+        $('#tabs').append(tabList);
 
         //bind click action
         $('#tabs .selectable').click(function(event){
@@ -59,6 +59,6 @@ function dumpTabs(query){
         });
         //select the first tab in the list
         $('#tabs '+ selected_item).attr('data-selected', false);
-        $('#tabs li:first').attr('data-selected', true);
+        $('#tabs div:first').attr('data-selected', true);
     });
 }

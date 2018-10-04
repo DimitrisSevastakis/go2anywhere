@@ -1,8 +1,9 @@
 var timeouts = {};
-var emptyList = '<center><li>No Item Found</li></center>';
+var emptyList = '<center><div>No Item Found</div></center>';
 var selected_search = '[data-search-selected=true]';
-var selected_item = 'li[data-selected=true]';
+var selected_item = 'div[data-selected=true]';
 var selected_style = "";
+var selected_theme = "";
 
 //when the extension window is loaded do:
 // document.addEventListener('DOMContentLoaded', onInit, true); 
@@ -20,12 +21,12 @@ chrome.storage.local.get(['go2anywhere/selected_style'], function(selected) {
 });
 
 chrome.storage.local.get(['go2anywhere/selected_theme'], function(selected) {
-    var theme = selected['go2anywhere/selected_theme'];
-    if(theme){
-        if (selected!="Embedded" && theme =="fullscreen")
-            theme = "now";
-        $('head').append('<link rel="stylesheet" type="text/css" href="css/'+theme+'.css">');
-        applyThemeSettings(theme);
+    selected_theme = selected['go2anywhere/selected_theme'];
+    if(selected_theme){
+        if (selected!="Embedded" && selected_theme =="fullscreen")
+            selected_theme = "now";
+        $('head').append('<link rel="stylesheet" type="text/css" href="css/'+selected_theme+'.css">');
+        applyThemeSettings(selected_theme);
     } 
     else{
         $('head').append('<link rel="stylesheet" type="text/css" href="css/now.css">');
