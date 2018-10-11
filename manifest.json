@@ -15,6 +15,7 @@
     "alarms",
     "storage",
     "chrome://favicon/",
+    "webNavigation",
     "<all_urls>"
   ],
 
@@ -27,6 +28,11 @@
       "js": ["embedded.js"]
     }
   ],
+
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
 
   "web_accessible_resources": [
       "ipopup.html", "jquery-1.10.2.js", "bookmarks.js", "tabs.js", "history.js", "search.js", "navigation.js", "popup.js", "ipopup.js"

@@ -11,9 +11,13 @@ function handleSelect(item, focus){
             //if a tab already exists with this url bring that tab forth, along with its window
             if(tabs[j].url.replace('http://', '') == s.attr('href').replace('http://', '')){
                 //bring window forth
+                console.log("to vrika");
                 chrome.windows.update(tabs[j].windowId,{focused: true});
                 //bring tab forth
-                chrome.tabs.update(tabs[j].id, {active: true});
+                chrome.tabs.getSelected(null, function(tab){
+                    chrome.tabs.update(tabs[j].id, {active: true});
+                    chrome.tabs.sendMessage(tab.id, {toggleGo2Anywhere: "true"}, function(response){});
+                });
                 tab_exists = true;
                 break;
             }   
@@ -37,6 +41,7 @@ function handleSelect(item, focus){
                     }
                 }
                 if(!focus){
+                    chrome.tabs.sendMessage(tab.id, {toggleGo2Anywhere: "true"}, function(response){});
                     window.close();
                 }
             });

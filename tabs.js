@@ -1,3 +1,5 @@
+var tabList;
+
 function loadTabs(){
     if($('#tbs').attr('data-last-search') != $('#search').val() || $('#tabs li').length==0) dumpTabs($('#search').val());
     $('#results').animate({left: "0px"}, 250);
@@ -16,7 +18,7 @@ function closeTab(){
 }
 
 function dumpTabs(query){
-    var tabList = new Array();
+    tabList = new Array();
     $('#tbs').attr('data-last-search', query);
     chrome.tabs.query({},function(tabs){
         var j;
@@ -36,6 +38,7 @@ function dumpTabs(query){
             var div = $('<div class="selectable" id="'+tabs[j].id+'">').append(span);
 
             div.append('<p class="urladdr">' + tabs[j].url +'</p>');
+            div.append('<img class="go2anywherepreview"/>');
             div.attr('href', tabs[j].url);
             //add item to list
             tabList[j] = div;
