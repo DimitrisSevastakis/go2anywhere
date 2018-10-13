@@ -19,7 +19,7 @@ chrome.storage.local.get(['go2anywhere/selected_theme'], function(selected) {
 });
 
 //get bookmarks
-dumpBookmarks();
+
 $('#hstr').attr('data-search-increment', 0);
 //select bookmarks as the default search
 $('#filters td').attr('data-search-selected', false);
@@ -29,6 +29,8 @@ $('.res').attr('data-last-search', '');
 chrome.alarms.onAlarm.addListener(loadHistory);
 
 $(function() {
+	dumpTabs();
+	dumpBookmarks();
 	//on every key input check if 'enter' 'delete' 'arrow-up' or 'arrow-down'
 	$('.res').click(function(event){
 		switch(event.target.id){
@@ -47,8 +49,14 @@ $(function() {
 	$('#search').bind('input',function(event) {
 		//default: filter bookmarks
 		searchIn = String($(selected_search).attr('id'));
-		if(searchIn == 'bkmarks') loadBookmarks();
-		else if(searchIn == 'tbs') loadTabs();
+		if(searchIn == 'bkmarks'){
+			loadBookmarks();
+			updateBookmarks();
+		} 
+		else if(searchIn == 'tbs'){
+			loadTabs();
+			updateTabs();
+		} 
 		// else if(searchIn == 'hstr') createHistoryAlarm();
 		else if(searchIn == 'hstr') loadHistory();
 	});
@@ -58,9 +66,6 @@ $(function() {
 		switch(event.which){
 			case 13:
 				//case enter open selected bookmark
-				// chrome.tabs.getSelected(null, function(tab){
-				// 	chrome.tabs.sendMessage(tab.id, {toggleGo2Anywhere: "true"}, function(response) {});
-				// });
 				handleSelect(searchIn, event.shiftKey);
 				break;
 			case 38:
@@ -119,7 +124,6 @@ chrome.storage.local.get(['go2anywhere/selected_tab'], function(selected) {
 		loadHistory();
 	}
 });
-console.log(tabList);
 chrome.runtime.sendMessage({type: "request", options: { 
 	type: "image-request-all", 
 	title: "Test",
@@ -131,7 +135,15 @@ chrome.runtime.sendMessage({type: "request", options: {
 			if(image){
 				item.find('img')[0].src=image;
 			}
-			console.log(item.find('.urladdr')[0].innerText);
+		});
+
+		bookmarkList.forEach(function(item, index){
+			var url = item.find('.urladdr')[0].innerText;
+			url = url.split("(/")[0];
+			var image = imageDict[url];
+			if(image){
+				item.find('img')[0].src=image;
+			}
 		});
 });
 

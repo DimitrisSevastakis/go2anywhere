@@ -16,7 +16,8 @@
     "storage",
     "chrome://favicon/",
     "webNavigation",
-    "<all_urls>"
+    "<all_urls>",
+    "activeTab"
   ],
 
   "options_page": "options.html",

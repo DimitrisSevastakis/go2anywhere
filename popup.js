@@ -23,7 +23,7 @@ chrome.storage.local.get(['go2anywhere/selected_style'], function(selected) {
 chrome.storage.local.get(['go2anywhere/selected_theme'], function(selected) {
     selected_theme = selected['go2anywhere/selected_theme'];
     if(selected_theme){
-        if (selected!="Embedded" && selected_theme =="fullscreen")
+        if (selected!="Embedded" && (selected_theme =="fullscreen" || selected_theme =="previews"))
             selected_theme = "now";
         $('head').append('<link rel="stylesheet" type="text/css" href="css/'+selected_theme+'.css">');
         applyThemeSettings(selected_theme);
@@ -37,6 +37,7 @@ chrome.storage.local.get(['go2anywhere/selected_theme'], function(selected) {
 
 //get bookmarks
 dumpBookmarks();
+dumpTabs();
 $('#hstr').attr('data-search-increment', 0);
 //select bookmarks as the default search
 $('#filters td').attr('data-search-selected', false);
@@ -63,8 +64,14 @@ $(function() {
     $('#search').bind('input',function(event) {
         //default: filter bookmarks
         searchIn = String($(selected_search).attr('id'));
-        if(searchIn == 'bkmarks') loadBookmarks();
-        else if(searchIn == 'tbs') loadTabs();
+        if(searchIn == 'bkmarks'){
+            loadBookmarks();
+            updateBookmarks();
+        } 
+        else if(searchIn == 'tbs'){
+            loadTabs();
+            updateTabs();
+        } 
         else if(searchIn == 'hstr') loadHistory();
     });
 

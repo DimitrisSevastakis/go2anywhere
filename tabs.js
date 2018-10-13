@@ -1,7 +1,7 @@
 var tabList;
 
 function loadTabs(){
-    if($('#tbs').attr('data-last-search') != $('#search').val() || $('#tabs li').length==0) dumpTabs($('#search').val());
+    // if($('#tbs').attr('data-last-search') != $('#search').val() || $('#tabs li').length==0) dumpTabs($('#search').val());
     $('#results').animate({left: "0px"}, 250);
     $('.res').attr('data-search-selected', false);
     $('#tbs').attr('data-search-selected', true);
@@ -17,6 +17,30 @@ function closeTab(){
     chrome.tabs.remove(parseInt(id));
 }
 
+function updateTabs(){
+    var query = $('#search').val();
+    tabList.forEach(function(item, index){
+        var title = item.find('span')[0].innerHTML
+        var url = item.find('.urladdr')[0].innerHTML
+        
+        var obj = {
+            "title" : title,
+            "url" : url
+        };
+
+        var predicate = srch(obj, query, '');
+        if(predicate == true){
+            item.removeClass('g2anomatch');
+        }
+        else{
+            item.addClass('g2anomatch');
+        }
+    });
+    
+    $('#tabs '+ selected_item).attr('data-selected', false);
+    $('#tabs > :not(.g2anomatch):first').attr('data-selected', true);  
+}
+
 function dumpTabs(query){
     tabList = new Array();
     $('#tbs').attr('data-last-search', query);
@@ -25,7 +49,7 @@ function dumpTabs(query){
         //go through all the open tabs
         for(j=0; j<tabs.length; j++){
             //if a tab already exists with this url bring that tab forth, along with its window
-            var predicate = srch(tabs[j], query, '');
+            var predicate = !srch(tabs[j], query, '');
             if(predicate == true){
                 continue;
             }

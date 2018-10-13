@@ -42,6 +42,11 @@ img.preview{
     margin-top: 10px;
 }
 
+.g2anomatch{
+    visibility: hidden !important;
+    position: absolute !important;
+}
+
 #tf{
     text-align: center;
     left:0;
@@ -131,6 +136,8 @@ tr#filters{
 }
 
 div.selectable{
+    visibility: visible;
+    position: inherit;
     cursor:pointer;
     overflow: hidden;
     padding:5px;

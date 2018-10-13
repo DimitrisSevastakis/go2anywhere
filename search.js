@@ -14,7 +14,7 @@ function isMatch(str, q){
 
 function srch(item, query, parent){
     var predicate = false;
-    
+    if (!query) return true;
     if (query && !item.children) {
         //if '@' search this element's title of exact match
         if(query.indexOf('@') == 0){
@@ -28,7 +28,7 @@ function srch(item, query, parent){
             predicate = String(item.url.toLowerCase()).indexOf(q.toLowerCase()) == -1;
             return predicate;
         }
-        //if '>' and in bookmarks, search elements with folder path that matches the query
+        //if '/' and in bookmarks, search elements with folder path that matches the query
         if($(selected_search).attr('id')=='bkmarks' && query.indexOf('/')==0){
             //if '|' exists, it marks the end of the bookmark path search string else the whole string it the query 
             var end = (query.indexOf('|')==-1) ? query.length : query.indexOf('|');
@@ -49,11 +49,13 @@ function srch(item, query, parent){
             return false;
         }
 
+
         //else search this element's title for match and url for exact match
         var queries = query.split(' ');
-
         for(i=0; i<queries.length; i++){
-            if(String(item.title.toLowerCase()).indexOf(queries[i].toLowerCase())==-1 && String(item.url.toLowerCase()).indexOf(queries[i].toLowerCase())==-1) return true;
+            if(String(item.title.toLowerCase()).indexOf(queries[i].toLowerCase()) !=-1 
+                || String(item.url.toLowerCase()).indexOf(queries[i].toLowerCase()) != -1) 
+                    return true;
         }
         return predicate;
     }

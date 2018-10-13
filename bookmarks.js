@@ -3,10 +3,34 @@ var visit_count;
 var search_id=0;
 
 function loadBookmarks(){
-    if($('#bkmarks').attr('data-last-search') != $('#search').val()) dumpBookmarks($('#search').val()); 
+    // if($('#bkmarks').attr('data-last-search') != $('#search').val()) dumpBookmarks($('#search').val()); 
     $('#results').animate({left: "-100%"}, 250);
     $('.res').attr('data-search-selected', false);
     $('#bkmarks').attr('data-search-selected', true);
+}
+
+function updateBookmarks(){
+    var query = $('#search').val();
+    bookmarkList.forEach(function(item, index){
+        var title = item.find('span')[0].innerHTML
+        var url = item.find('.urladdr')[0].innerHTML
+        
+        var obj = {
+            "title" : title,
+            "url" : url
+        };
+
+        var predicate = srch(obj, query, '');
+        if(predicate == true){
+            item.removeClass('g2anomatch');
+        }
+        else{
+            item.addClass('g2anomatch');
+        }
+    });
+
+    $('#bookmarks '+ selected_item).attr('data-selected', false);
+    $('#bookmarks > :not(.g2anomatch):first').attr('data-selected', true);  
 }
 
 //add bookmarks to the bookmark section
@@ -94,7 +118,7 @@ function dumpNode(bookmarkNode, query, parent) {
     temp = String(bookmarkNode.title);
 
     //if there is no match return empty element
-    var predicate = srch(bookmarkNode, query, parent);
+    var predicate = !srch(bookmarkNode, query, parent);
     if(predicate == true){
         return $('<span></span>');
     }
@@ -112,6 +136,8 @@ function dumpNode(bookmarkNode, query, parent) {
         dumpTreeNodes(bookmarkNode.children, query, par.replace('//', '/'));
     }
     li.append('<p class="urladdr">'+bookmarkNode.url +'<span class="bookmark_path">('+parent +')</span></p>');
+    li.append('<img class="go2anywherepreview"/>');
+
     if(!bookmarkNode.children) {
         li.attr('href', bookmarkNode.url);
     }

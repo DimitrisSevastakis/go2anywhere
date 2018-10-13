@@ -38,6 +38,11 @@ body {
     margin-top: 10px;
 }
 
+.g2anomatch{
+    visibility: hidden !important;
+    position: absolute !important;
+}
+
 #tf{
     text-align: center;
     left:0;
