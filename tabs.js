@@ -1,7 +1,7 @@
 var tabList;
 
 function loadTabs(){
-    // if($('#tbs').attr('data-last-search') != $('#search').val() || $('#tabs li').length==0) dumpTabs($('#search').val());
+    if($('#tbs').attr('data-last-search') != $('#search').val() || $('#tabs li').length==0) updateTabs($('#search').val());
     $('#results').animate({left: "0px"}, 250);
     $('.res').attr('data-search-selected', false);
     $('#tbs').attr('data-search-selected', true);
@@ -62,7 +62,8 @@ function dumpTabs(query){
             var div = $('<div class="selectable" id="'+tabs[j].id+'">').append(span);
 
             div.append('<p class="urladdr">' + tabs[j].url +'</p>');
-            div.append('<img class="go2anywherepreview"/>');
+            if(selected_theme=="previews")
+                div.append('<img class="go2anywherepreview"/>');
             div.attr('href', tabs[j].url);
             //add item to list
             tabList[j] = div;

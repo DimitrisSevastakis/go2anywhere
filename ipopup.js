@@ -7,10 +7,10 @@ var selected_style = "";
 var selected_theme = "";
 
 chrome.storage.local.get(['go2anywhere/selected_theme'], function(selected) {
-	var theme = selected['go2anywhere/selected_theme'];
-	if(theme){
-		$('head').append('<link rel="stylesheet" type="text/css" href="css/'+theme+'.css">');
-		applyThemeSettings(theme);
+	selected_theme = selected['go2anywhere/selected_theme'];
+	if(selected_theme){
+		$('head').append('<link rel="stylesheet" type="text/css" href="css/'+selected_theme+'.css">');
+		applyThemeSettings(selected_theme);
 	} 
 	else{
 		$('head').append('<link rel="stylesheet" type="text/css" href="css/now.css">');

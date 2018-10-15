@@ -11,13 +11,13 @@ function handleSelect(item, focus){
             //if a tab already exists with this url bring that tab forth, along with its window
             if(tabs[j].url.replace('http://', '') == s.attr('href').replace('http://', '')){
                 //bring window forth
-                console.log("to vrika");
                 chrome.windows.update(tabs[j].windowId,{focused: true});
                 //bring tab forth
                 chrome.tabs.getSelected(null, function(tab){
                     chrome.tabs.update(tabs[j].id, {active: true});
                     chrome.tabs.sendMessage(tab.id, {toggleGo2Anywhere: "true"}, function(response){});
                 });
+                window.close();
                 tab_exists = true;
                 break;
             }   
@@ -53,9 +53,7 @@ function openAll(section, newWindow){
     //get all the children of the scrollable (should be list items)
     items = $("#"+getTarget(section)+" .scrollable").children();
     var n = 0;
-    console.log(newWindow);
     if (newWindow){
-        console.log("creating new window");
         first = items[0];
         items.splice(0,1);
         chrome.windows.create({url: $(first).attr('href')}, function(win){
@@ -104,8 +102,6 @@ function moveUp(item){
     var visibleItems = $('#'+target+ ' >:not(.g2anomatch)');
     
     var indexSelected = visibleItems.index($('#'+target+' > [data-selected=true]')[0]);
-    console.log(visibleItems.length);
-    console.log(indexSelected);
     if(indexSelected > 0){
         $(visibleItems[indexSelected]).attr('data-selected', false);
         next = $(visibleItems[indexSelected-1]);
@@ -135,8 +131,6 @@ function moveDown(item){
     var visibleItems = $('#'+target+ ' >:not(.g2anomatch)');
     
     var indexSelected = visibleItems.index($('#'+target+' > [data-selected=true]')[0]);
-    console.log(visibleItems.length);
-    console.log(indexSelected);
     if(indexSelected < visibleItems.length -1){
         $(visibleItems[indexSelected]).attr('data-selected', false);
         next = $(visibleItems[indexSelected+1]);

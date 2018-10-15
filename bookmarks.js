@@ -3,7 +3,7 @@ var visit_count;
 var search_id=0;
 
 function loadBookmarks(){
-    // if($('#bkmarks').attr('data-last-search') != $('#search').val()) dumpBookmarks($('#search').val()); 
+    if($('#bkmarks').attr('data-last-search') != $('#search').val()) updateBookmarks($('#search').val()); 
     $('#results').animate({left: "-100%"}, 250);
     $('.res').attr('data-search-selected', false);
     $('#bkmarks').attr('data-search-selected', true);
@@ -12,15 +12,17 @@ function loadBookmarks(){
 function updateBookmarks(){
     var query = $('#search').val();
     bookmarkList.forEach(function(item, index){
-        var title = item.find('span')[0].innerHTML
-        var url = item.find('.urladdr')[0].innerHTML
+        var title = item.find('span')[0].textContent
+        var url = item.find('.urladdr')[0].textContent
+        var bookmark_path = item.find('.bookmark_path')[0].textContent;
+        bookmark_path = bookmark_path.substring(1, bookmark_path.length-1);
         
         var obj = {
             "title" : title,
-            "url" : url
+            "url" : url,
         };
 
-        var predicate = srch(obj, query, '');
+        var predicate = srch(obj, query, bookmark_path);
         if(predicate == true){
             item.removeClass('g2anomatch');
         }
@@ -136,7 +138,8 @@ function dumpNode(bookmarkNode, query, parent) {
         dumpTreeNodes(bookmarkNode.children, query, par.replace('//', '/'));
     }
     li.append('<p class="urladdr">'+bookmarkNode.url +'<span class="bookmark_path">('+parent +')</span></p>');
-    li.append('<img class="go2anywherepreview"/>');
+    if(selected_theme=="previews")
+        li.append('<img class="go2anywherepreview"/>');
 
     if(!bookmarkNode.children) {
         li.attr('href', bookmarkNode.url);
