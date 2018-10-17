@@ -8,13 +8,23 @@ function loadTabs(){
 }
 
 function closeTab(){
-    var srchSelected = $(selected_search).attr('id');
-    var s = $('#'+getTarget(srchSelected)+' '+ selected_item);
-    id = s.attr('id');
-    next = (!s.is(':first-child')) ? s.prev() : s.next();
-    next.attr('data-selected', true);
-    s.remove();
+    var target = getTarget($(selected_search).attr('id'));
+    var visibleItems = $('#'+target+ ' >:not(.g2anomatch)');
+    var indexSelected = visibleItems.index($('#'+target+' > [data-selected=true]')[0]);
+
+    var id = $(visibleItems[indexSelected]).attr('id');
     chrome.tabs.remove(parseInt(id));
+
+    // tabList.splice(indexSelected);
+    visibleItems[indexSelected].remove();
+    visibleItems.splice(indexSelected,1);
+    
+    if(indexSelected >= visibleItems.length)
+        indexSelected--;
+
+    if(indexSelected >= 0)
+        $(visibleItems[indexSelected]).attr('data-selected', true);
+
 }
 
 function updateTabs(){
