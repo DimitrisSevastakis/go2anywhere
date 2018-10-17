@@ -56,10 +56,11 @@ function srch(item, query, parent){
         if(queries.length == 1 && queries[0] == '') return true;
         for(i=0; i<queries.length; i++){
             if (queries[i] == '') continue;
-            if(String(item.title.toLowerCase()).indexOf(queries[i].toLowerCase()) !=-1 
-                || String(item.url.toLowerCase()).indexOf(queries[i].toLowerCase()) != -1) 
-                    return true;
+            if(String(item.title.toLowerCase()).indexOf(queries[i].toLowerCase()) == -1 
+                && String(item.url.toLowerCase()).indexOf(queries[i].toLowerCase()) == -1) 
+                    return false;
         }
-        return predicate;
+
+        return true;
     }
 }
