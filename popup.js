@@ -38,6 +38,7 @@ chrome.storage.local.get(['go2anywhere/selected_theme'], function(selected) {
 //get bookmarks
 dumpBookmarks();
 dumpTabs();
+dumpHistory();
 $('#hstr').attr('data-search-increment', 0);
 //select bookmarks as the default search
 $('#filters td').attr('data-search-selected', false);
@@ -72,6 +73,7 @@ $(function() {
             loadTabs();
             updateTabs();
         } 
+        // else if(searchIn == 'hstr') createHistoryAlarm();
         else if(searchIn == 'hstr') loadHistory();
     });
 

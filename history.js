@@ -1,18 +1,13 @@
+var histList;
 function loadHistory(){
     increment = $('#hstr').attr('data-search-increment');
     increment++;
     $('#hstr').attr('data-search-increment', increment);
     var q = $('#search').val();
-
-    if(String($('#hstr').attr('data-last-search')) !== q || $('#history li').length==0) dumpHistory(q,increment);
+    if(String($('#hstr').attr('data-last-search')) !== q || $('#history > div').length==0) updateHistory();
     $('#results').animate({left: "-200%"}, 250);
     $('.res').attr('data-search-selected', false);
     $('#hstr').attr('data-search-selected', true);
-}
-
-function createHistoryAlarm(){
-    chrome.alarms.clear('history_update');
-    chrome.alarms.create('history_update',{when:Date.now()+500});
 }
 
 function deleteHistoryItem(){
@@ -28,15 +23,38 @@ function deleteHistoryItem(){
     }
 }
 
-function dumpHistory(query, increment){
-    $('#hstr').attr('data-last-search', query);
-    if(increment!=parseInt($('#hstr').attr('data-search-increment'))) return;
-    $('#history > div').empty();
-    chrome.history.search({'text': query},function(history){
-        console.log(history);
-        if(increment!=parseInt($('#hstr').attr('data-search-increment'))) return;
+function updateHistory(){
+    var query = $('#search').val();
+    histList.forEach(function(item, index){
+        var title = item.find('span')[0].innerHTML
+        var url = item.find('.urladdr')[0].innerHTML
+        
+        var obj = {
+            "title" : title,
+            "url" : url
+        };
+
+        var predicate = srch(obj, query, '');
+        if(predicate == true){
+            item.removeClass('g2anomatch');
+        }
+        else{
+            item.addClass('g2anomatch');
+        }
+    });
+    
+    $('#history '+ selected_item).attr('data-selected', false);
+    $('#history > :not(.g2anomatch):first').attr('data-selected', true);  
+}
+
+function dumpHistory(){
+    console.log("dumping history");
+    histList = new Array();
+    $('#history').empty();
+    var milliseconds = (new Date).getTime();
+    chrome.history.search({'text': '', 'startTime': 0, 'endTime':milliseconds, 'maxResults':100} ,function(history){
         if(history.length == 0){
-            $('#history > div').append(emptyList);
+            $('#history').append(emptyList);
             return;
         }
         var j;
@@ -56,7 +74,6 @@ function dumpHistory(query, increment){
         }
        
         for(j=0; j<history.length; j++){
-            if(increment!=parseInt($('#hstr').attr('data-search-increment'))) return;
             //if a tab already exists with this url bring that tab forth, along with its window
             var title = history[j].title;
             var url = history[j].url;
@@ -64,15 +81,17 @@ function dumpHistory(query, increment){
             var span = $('<span>');
             anchor.html(title);
             span.append(anchor);
-            var li = $('<li class="selectable">').append(span);
+            var div = $('<div class="selectable">').append(span);
 
-            li.append('<p class="urladdr">' + history[j].url +'</p>');
-            li.attr('href', history[j].url);
-            $('#history > div').append(li);
+            div.append('<p class="urladdr">' + history[j].url +'</p>');
+            div.attr('href', history[j].url);
+
+            histList.push(div);
+            $('#history').append(div);
             
             // //select the first tab in the list
             $('#history '+ selected_item).attr('data-selected', false);
-            $('#history li:first').attr('data-selected', true);
+            $('#history div:first').attr('data-selected', true);
         }
         $('#history .selectable').click(function(event){
             $('#'+ getTarget($(selected_search).attr('id')) +' '+ selected_item).attr('data-selected', false);

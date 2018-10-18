@@ -31,6 +31,7 @@ chrome.alarms.onAlarm.addListener(loadHistory);
 $(function() {
 	dumpTabs();
 	dumpBookmarks();
+	dumpHistory();
 	//on every key input check if 'enter' 'delete' 'arrow-up' or 'arrow-down'
 	$('.res').click(function(event){
 		switch(event.target.id){

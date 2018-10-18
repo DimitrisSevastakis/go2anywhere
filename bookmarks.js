@@ -150,7 +150,7 @@ function dumpNode(bookmarkNode, query, parent) {
     }
 
     if(!bookmarkNode.children){
-        bookmarkList[bookmarkList.length] = li;
+        bookmarkList.push(li);
         // $('#bookmarks > div').append(li);
     }
 }
