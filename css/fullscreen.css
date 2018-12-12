@@ -73,12 +73,12 @@ a,p{
     vertical-align: text-top;
     width: 33%;
     float: left;
-    margin-left: 0.2%;
+    margin-left: 0.3%;
 }
 
 #results{
     width: 300%;
-    left: -33%;
+    left: 0%;
     position: fixed;
     top: 100px;
     bottom: 5px;

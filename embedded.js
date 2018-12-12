@@ -1,3 +1,12 @@
+function qfdefer(method) {
+    if (window.qfjq && qfjq) {
+        setTimeout(function() { method() }, 250);
+    } else {
+        setTimeout(function() { qfdefer(method) }, 50);
+    }
+}
+
+
 // var extensionOrigin = 'chrome-extension://' + chrome.runtime.id;
 // if (!location.ancestorOrigins.contains(extensionOrigin)) {
 var go2anywhereIsShowing1 = false;
@@ -23,7 +32,7 @@ function messageHandler(request, sender, sendResponse){
 				var w = "600px";
 				var h = "450px";
 				var ot = "10%";
-				if(theme == 'fullscreen' || theme == 'previews'){
+				if(theme == 'fullscreen' || theme == 'previews' || theme == 'linepreviews'){
 					w = "100%";
 					h = "100%";
 					ot = "0px";

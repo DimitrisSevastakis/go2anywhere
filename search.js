@@ -29,7 +29,7 @@ function srch(item, query, parent){
             return predicate;
         }
         //if '/' and in bookmarks, search elements with folder path that matches the query
-        if($(selected_search).attr('id')=='bkmarks' && query.indexOf('/')==0){
+        if(g2ajq(selected_search).attr('id')=='bkmarks' && query.indexOf('/')==0){
             //if '|' exists, it marks the end of the bookmark path search string else the whole string is the query 
             var end = (query.indexOf('|')==-1) ? query.length : query.indexOf('|');
             q = query.substring(1, end);

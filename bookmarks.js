@@ -3,14 +3,14 @@ var visit_count;
 var search_id=0;
 
 function loadBookmarks(){
-    if($('#bkmarks').attr('data-last-search') != $('#search').val()) updateBookmarks($('#search').val()); 
-    $('#results').animate({left: "-100%"}, 250);
-    $('.res').attr('data-search-selected', false);
-    $('#bkmarks').attr('data-search-selected', true);
+    if(g2ajq('#bkmarks').attr('data-last-search') != g2ajq('#search').val()) updateBookmarks(g2ajq('#search').val()); 
+    g2ajq('#results').animate({left: "-100%"}, 250);
+    g2ajq('.res').attr('data-search-selected', false);
+    g2ajq('#bkmarks').attr('data-search-selected', true);
 }
 
 function updateBookmarks(){
-    var query = $('#search').val();
+    var query = g2ajq('#search').val();
     bookmarkList.forEach(function(item, index){
         var title = item.find('span')[0].textContent
         var url = item.find('.urladdr')[0].textContent
@@ -31,15 +31,15 @@ function updateBookmarks(){
         }
     });
 
-    $('#bookmarks '+ selected_item).attr('data-selected', false);
-    $('#bookmarks > :not(.g2anomatch):first').attr('data-selected', true);  
+    g2ajq('#bookmarks '+ selected_item).attr('data-selected', false);
+    g2ajq('#bookmarks > :not(.g2anomatch):first').attr('data-selected', true);  
 }
 
 //add bookmarks to the bookmark section
 function dumpBookmarks(query) {
     search_id++;
     var current_search = search_id;
-    $('#bkmarks').attr('data-last-search', query);
+    g2ajq('#bkmarks').attr('data-last-search', query);
     bookmarkList = new Array();
     visit_count = new Array();
     //get the bookmarks tree
@@ -49,15 +49,15 @@ function dumpBookmarks(query) {
                 
         //if there are no bookmarks
         if(bookmarkList.length==0){
-            $('#bookmarks').empty();
-            $('#bookmarks').append(emptyList);
+            g2ajq('#bookmarks').empty();
+            g2ajq('#bookmarks').append(emptyList);
             return;
         }
         //txt will contain all the urls of the bookmarks
         var txt = new Array();
-        var htmltoreturn = $('<div id="tempholder"></div>');
+        var htmltoreturn = g2ajq('<div id="tempholder"></div>');
         for(var i=0;i<bookmarkList.length;i++){
-            txt[i] = bookmarkList[i].children('.urladdr').text();
+            txt[i] = bookmarkList[i].children('.textContainer').children('.urladdr').text();
             txt[i] = txt[i].substring(0,txt[i].indexOf('('));
             
             // get visit count for each bookmark
@@ -84,21 +84,21 @@ function dumpBookmarks(query) {
                     }
 
                     //empty old list
-                    $('#bookmarks').empty();
+                    g2ajq('#bookmarks').empty();
                     if(search_id!=current_search) return;
-                    $('#bookmarks').append(templ);
+                    g2ajq('#bookmarks').append(templ);
                     // divtoreturn.append(templ);
 
                     //add click listener
-                    $('#bookmarks .selectable').click(function(event){
-                        $('#'+ getTarget($(selected_search).attr('id')) +' '+ selected_item).attr('data-selected', false);
-                        $(this).attr('data-selected', true);
+                    g2ajq('#bookmarks .selectable').click(function(event){
+                        g2ajq('#'+ getTarget(g2ajq(selected_search).attr('id')) +' '+ selected_item).attr('data-selected', false);
+                        g2ajq(this).attr('data-selected', true);
                         handleSelect('bkmarks', 0);
                     });
 
                     //select the first bookmark in the list
-                    $('#bookmarks '+ selected_item).attr('data-selected', false);
-                    $('#bookmarks div:first').attr('data-selected', true);
+                    g2ajq('#bookmarks '+ selected_item).attr('data-selected', false);
+                    g2ajq('#bookmarks div:first').attr('data-selected', true);
 
                 }
             });
@@ -122,43 +122,51 @@ function dumpNode(bookmarkNode, query, parent) {
     //if there is no match return empty element
     var predicate = !srch(bookmarkNode, query, parent);
     if(predicate == true){
-        return $('<span></span>');
+        return g2ajq('<span></span>');
     }
 
-    var anchor = $('<p>');
-    var span = $('<span>');
+    var anchor = g2ajq('<p>');
+    var span = g2ajq('<span>');
+    var textdiv = g2ajq('<div class="textContainer">');
+
     anchor.html(temp);
     span.append(anchor);
 
-    var li = $('<div class="selectable" id="'+bookmarkNode.id+'">');
+    var li = g2ajq('<div class="selectable" id="'+bookmarkNode.id+'">');
     // li.append('<div class="imgholder"><img class="bmtn" src="chrome://favicon/'+bookmarkNode.url+'"/></div>');
-    li.append(span);
+    textdiv.append(span);
     if (bookmarkNode.children && bookmarkNode.children.length > 0) {
         var par = (!String(bookmarkNode.title)) ? parent : parent+'/' + bookmarkNode.title
         dumpTreeNodes(bookmarkNode.children, query, par.replace('//', '/'));
     }
-    li.append('<p class="urladdr">'+bookmarkNode.url +'<span class="bookmark_path">('+parent +')</span></p>');
+    textdiv.append('<p class="urladdr">'+bookmarkNode.url +'<span class="bookmark_path">('+parent +')</span></p>');
+    li.append(textdiv);
+    
     if(selected_theme=="previews")
         li.append('<img class="go2anywherepreview"/>');
+    
+    if(selected_theme=="linepreviews")
+        li.prepend('<img class="go2anywherepreview"/>');
+
 
     if(!bookmarkNode.children) {
         li.attr('href', bookmarkNode.url);
     }
 
-    if(selected_theme == "previews"){
+    if(selected_theme == "previews" || selected_theme == "linepreviews"){
         li.append('<p class="preview"/>');
     }
-
+    
     if(!bookmarkNode.children){
         bookmarkList.push(li);
-        // $('#bookmarks > div').append(li);
+        // g2ajq('#bookmarks > div').append(li);
     }
 }
 
 function deleteBookmark(){
-    var srchSelected = $(selected_search).attr('id');
-    var s = $('#'+getTarget(srchSelected)+' '+ selected_item);
-    var d = confirm('Are you sure you want to delete the following bookmark? \n \'' + $('#bookmarks '+ selected_item + ' > span').text() + '\'');
+    var srchSelected = g2ajq(selected_search).attr('id');
+    var s = g2ajq('#'+getTarget(srchSelected)+' '+ selected_item);
+    var d = confirm('Are you sure you want to delete the following bookmark? \n \'' + g2ajq('#bookmarks '+ selected_item + ' > span').text() + '\'');
     if(d){
         id = s.attr('id');
         next = (!s.is(':first-child')) ? s.prev() : s.next();

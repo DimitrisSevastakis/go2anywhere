@@ -9,47 +9,47 @@ var selected_theme = "";
 chrome.storage.local.get(['go2anywhere/selected_theme'], function(selected) {
 	selected_theme = selected['go2anywhere/selected_theme'];
 	if(selected_theme){
-		$('head').append('<link rel="stylesheet" type="text/css" href="css/'+selected_theme+'.css">');
+		g2ajq('head').append('<link rel="stylesheet" type="text/css" href="css/'+selected_theme+'.css">');
 		applyThemeSettings(selected_theme);
 	} 
 	else{
-		$('head').append('<link rel="stylesheet" type="text/css" href="css/now.css">');
+		g2ajq('head').append('<link rel="stylesheet" type="text/css" href="css/now.css">');
 		applyThemeSettings('now');
 	}
 });
 
 //get bookmarks
+dumpTabs();
+dumpBookmarks();
 
-$('#hstr').attr('data-search-increment', 0);
+g2ajq('#hstr').attr('data-search-increment', 0);
 //select bookmarks as the default search
-$('#filters td').attr('data-search-selected', false);
-$('#bkmarks').attr('data-search-selected', true);
-$('.res').attr('data-last-search', '');
+g2ajq('#filters td').attr('data-search-selected', false);
+g2ajq('#bkmarks').attr('data-search-selected', true);
+g2ajq('.res').attr('data-last-search', '');
 
 chrome.alarms.onAlarm.addListener(loadHistory);
 
-$(function() {
-	dumpTabs();
-	dumpBookmarks();
-	dumpHistory();
+g2ajq(function() {
+	// dumpHistory();
 	//on every key input check if 'enter' 'delete' 'arrow-up' or 'arrow-down'
-	$('.res').click(function(event){
+	g2ajq('.res').click(function(event){
 		switch(event.target.id){
 			case 'tbs':
-				if($(selected_search).attr('id') != 'tbs') loadTabs();
+				if(g2ajq(selected_search).attr('id') != 'tbs') loadTabs();
 				break;
 			case 'bkmarks':
-				if($(selected_search).attr('id') != 'bkmarks') loadBookmarks();
+				if(g2ajq(selected_search).attr('id') != 'bkmarks') loadBookmarks();
 				break;
 			case 'hstr':
-				if($(selected_search).attr('id') != 'hstr') loadHistory();
+				// if(g2ajq(selected_search).attr('id') != 'hstr') loadHistory();
 				break;
 		}
 	});
 
-	$('#search').bind('input',function(event) {
+	g2ajq('#search').bind('input',function(event) {
 		//default: filter bookmarks
-		searchIn = String($(selected_search).attr('id'));
+		searchIn = String(g2ajq(selected_search).attr('id'));
 		if(searchIn == 'bkmarks'){
 			loadBookmarks();
 			updateBookmarks();
@@ -59,11 +59,11 @@ $(function() {
 			updateTabs();
 		} 
 		// else if(searchIn == 'hstr') createHistoryAlarm();
-		else if(searchIn == 'hstr') loadHistory();
+		// else if(searchIn == 'hstr') loadHistory();
 	});
 
-	$('body').keydown(function(event) {
-		searchIn = String($(selected_search).attr('id'));
+	g2ajq('body').keydown(function(event) {
+		searchIn = String(g2ajq(selected_search).attr('id'));
 		switch(event.which){
 			case 13:
 				//case enter open selected bookmark
@@ -95,7 +95,7 @@ $(function() {
 				if(event.ctrlKey){
 					event.preventDefault();
 					if(searchIn.indexOf("bkmarks")==0){
-						loadHistory();
+						// loadHistory();
 					}else if(searchIn.indexOf("tbs")==0){
 						loadBookmarks();
 					}
@@ -111,7 +111,7 @@ $(function() {
 				}
 				break;
 			default:
-				$('#search').focus();
+				g2ajq('#search').focus();
 		}
 	});
 });
@@ -122,7 +122,7 @@ chrome.storage.local.get(['go2anywhere/selected_tab'], function(selected) {
 		loadTabs();
 	}
 	else if(start_tab == "history"){
-		loadHistory();
+		// loadHistory();
 	}
 });
 chrome.runtime.sendMessage({type: "request", options: { 
@@ -148,7 +148,7 @@ chrome.runtime.sendMessage({type: "request", options: {
 		});
 });
 
-// $("#search").focus();
+// g2ajq("#search").focus();
 // }
 
 function getTarget(item){
@@ -170,7 +170,7 @@ function applyThemeSettings(theme){
 		case 'now':
 			time = (new Date()).getHours();
 			if(time <6 || time > 20){
-				$('#searchspace').css({"background-image" : "url(../images/googlenow2.jpg)"});
+				g2ajq('#searchspace').css({"background-image" : "url(../images/googlenow2.jpg)"});
 			}
 			break;
 		default:
@@ -179,8 +179,8 @@ function applyThemeSettings(theme){
 }
 
 function setFocusSearchBox() {
-	var iframe = $("#search")[0];
-	$(iframe).focus();
+	var iframe = g2ajq("#search")[0];
+	g2ajq(iframe).focus();
 }
 
 setTimeout(setFocusSearchBox, 100);

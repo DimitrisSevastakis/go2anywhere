@@ -25,11 +25,11 @@ chrome.storage.local.get(['go2anywhere/selected_theme'], function(selected) {
     if(selected_theme){
         if (selected!="Embedded" && (selected_theme =="fullscreen" || selected_theme =="previews"))
             selected_theme = "now";
-        $('head').append('<link rel="stylesheet" type="text/css" href="css/'+selected_theme+'.css">');
+        g2ajq('head').append('<link rel="stylesheet" type="text/css" href="css/'+selected_theme+'.css">');
         applyThemeSettings(selected_theme);
     } 
     else{
-        $('head').append('<link rel="stylesheet" type="text/css" href="css/now.css">');
+        g2ajq('head').append('<link rel="stylesheet" type="text/css" href="css/now.css">');
         applyThemeSettings('now');
     }
 });
@@ -38,33 +38,32 @@ chrome.storage.local.get(['go2anywhere/selected_theme'], function(selected) {
 //get bookmarks
 dumpBookmarks();
 dumpTabs();
-dumpHistory();
-$('#hstr').attr('data-search-increment', 0);
+// dumpHistory();
+g2ajq('#hstr').attr('data-search-increment', 0);
 //select bookmarks as the default search
-$('#filters td').attr('data-search-selected', false);
-$('#bkmarks').attr('data-search-selected', true);
-$('.res').attr('data-last-search', '');
-chrome.alarms.onAlarm.addListener(loadHistory);
+g2ajq('#filters td').attr('data-search-selected', false);
+g2ajq('#bkmarks').attr('data-search-selected', true);
+g2ajq('.res').attr('data-last-search', '');
 
-$(function() {
+g2ajq(function() {
     //on every key input check if 'enter' 'delete' 'arrow-up' or 'arrow-down'
-    $('.res').click(function(event){
+    g2ajq('.res').click(function(event){
         switch(event.target.id){
             case 'tbs':
-                if($(selected_search).attr('id') != 'tbs') loadTabs();
+                if(g2ajq(selected_search).attr('id') != 'tbs') loadTabs();
                 break;
             case 'bkmarks':
-                if($(selected_search).attr('id') != 'bkmarks') loadBookmarks();
+                if(g2ajq(selected_search).attr('id') != 'bkmarks') loadBookmarks();
                 break;
             case 'hstr':
-                if($(selected_search).attr('id') != 'hstr') loadHistory();
+                // if(g2ajq(selected_search).attr('id') != 'hstr') loadHistory();
                 break;
         }
     });
 
-    $('#search').bind('input',function(event) {
+    g2ajq('#search').bind('input',function(event) {
         //default: filter bookmarks
-        searchIn = String($(selected_search).attr('id'));
+        searchIn = String(g2ajq(selected_search).attr('id'));
         if(searchIn == 'bkmarks'){
             loadBookmarks();
             updateBookmarks();
@@ -74,11 +73,11 @@ $(function() {
             updateTabs();
         } 
         // else if(searchIn == 'hstr') createHistoryAlarm();
-        else if(searchIn == 'hstr') loadHistory();
+        // else if(searchIn == 'hstr') loadHistory();
     });
 
-    $('body').keydown(function(event) {
-        searchIn = String($(selected_search).attr('id'));
+    g2ajq('body').keydown(function(event) {
+        searchIn = String(g2ajq(selected_search).attr('id'));
         switch(event.which){
             case 13:
                 //case enter open selected bookmark
@@ -110,7 +109,7 @@ $(function() {
                 if(event.ctrlKey){
                     event.preventDefault();
                     if(searchIn.indexOf("bkmarks")==0){
-                        loadHistory();
+                        // loadHistory();
                     }else if(searchIn.indexOf("tbs")==0){
                         loadBookmarks();
                     }
@@ -126,7 +125,7 @@ $(function() {
                 }
                 break;
             default:
-                $('#search').focus();
+                g2ajq('#search').focus();
         }
     });
 });
@@ -162,7 +161,7 @@ function applyThemeSettings(theme){
         case 'now':
             time = (new Date()).getHours();
             if(time <6 || time > 20){
-                $('#searchspace').css({"background-image" : "url(../images/googlenow2.jpg)"});
+                g2ajq('#searchspace').css({"background-image" : "url(../images/googlenow2.jpg)"});
             }
             break;
         default:
@@ -170,4 +169,4 @@ function applyThemeSettings(theme){
     }
 }
 
-$("#search").focus();
+g2ajq("#search").focus();
