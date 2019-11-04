@@ -1,14 +1,11 @@
 function qfdefer(method) {
-    if (window.qfjq && qfjq) {
-        setTimeout(function() { method() }, 250);
-    } else {
-        setTimeout(function() { qfdefer(method) }, 50);
-    }
+	if (window.qfjq && qfjq) {
+		setTimeout(function() { method() }, 250);
+	} else {
+		setTimeout(function() { qfdefer(method) }, 50);
+	}
 }
 
-
-// var extensionOrigin = 'chrome-extension://' + chrome.runtime.id;
-// if (!location.ancestorOrigins.contains(extensionOrigin)) {
 var go2anywhereIsShowing1 = false;
 var lastFocused;
 var sc = document.createElement("script");
@@ -19,16 +16,14 @@ document.head.appendChild(sc);
 function messageHandler(request, sender, sendResponse){
 	if (request.toggleGo2Anywhere == "true"){
 		if(go2anywhereIsShowing1){
-			// console.log('removing iframe');
 			document.getElementById("go2anywherePopup").remove();
 			go2anywhereIsShowing1 = false;
 			if(lastFocused)
 				lastFocused.focus();
 		}else{
-			// console.log('adding iframe');
 			chrome.storage.local.get(['go2anywhere/selected_theme'], function(selected) {
 				var iframe = document.createElement('iframe');
-			    var theme = selected['go2anywhere/selected_theme'];
+				var theme = selected['go2anywhere/selected_theme'];
 				var w = "600px";
 				var h = "450px";
 				var ot = "10%";
@@ -45,12 +40,10 @@ function messageHandler(request, sender, sendResponse){
 				go2anywhereIsShowing1 = true;
 
 				lastFocused = document.activeElement;
-				iframe.focus();
+				iframe.contentWindow.focus();
 			});
 		}
 	}
 }
 
-// chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){console.log("gamietai")});
 chrome.runtime.onMessage.addListener(messageHandler);
-// }

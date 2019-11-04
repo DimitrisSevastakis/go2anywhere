@@ -62,6 +62,11 @@ a,p{
     width: 100%;
 }
 
+.g2anomatch{
+    visibility: hidden !important;
+    position: absolute !important;
+}
+
 #filters td{
     cursor:pointer;
     width: 33%;

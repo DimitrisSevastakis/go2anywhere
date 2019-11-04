@@ -134,7 +134,10 @@ chrome.runtime.sendMessage({type: "request", options: {
 			var url = item.find('.urladdr')[0].innerText;
 			var image = imageDict[url];
 			if(image){
-				item.find('img')[0].src=image;
+				imgs = item.find('img')
+				if(imgs.length > 0){
+					imgs[0].src=image;
+				}
 			}
 		});
 
@@ -143,7 +146,10 @@ chrome.runtime.sendMessage({type: "request", options: {
 			url = url.split("(/")[0];
 			var image = imageDict[url];
 			if(image){
-				item.find('img')[0].src=image;
+				imgs = item.find('img')
+				if(imgs.length > 0){
+					imgs[0].src=image;
+				}
 			}
 		});
 });

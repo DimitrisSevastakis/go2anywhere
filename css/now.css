@@ -59,11 +59,6 @@ a,p{
     position: absolute !important;
 }
 
-.g2anomatch{
-    visibility: hidden !important;
-    position: absolute !important;
-}
-
 .scrollable div{
     list-style-type: none;
     color: #6b6b6b;
