@@ -54,10 +54,6 @@ a,p{
     margin: 2px 0 2px 10px;
 }
 
-.g2anomatch{
-    visibility: hidden !important;
-    position: absolute !important;
-}
 
 .scrollable div{
     list-style-type: none;
