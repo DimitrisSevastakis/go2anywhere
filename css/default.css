@@ -30,12 +30,6 @@ a,p{
     font-size: 125%;
 }
 
-.g2anomatch{
-    visibility: hidden !important;
-    position: absolute !important;
-}
-
-
 #history, #tabs, #bookmarks{
     vertical-align: text-top;
     width: 580px;
